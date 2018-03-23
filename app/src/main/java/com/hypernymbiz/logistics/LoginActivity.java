@@ -1,6 +1,7 @@
 package com.hypernymbiz.logistics;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
@@ -38,7 +39,9 @@ public class LoginActivity extends AppCompatActivity {
     private EditText edit_username, edit_password;
     private TextInputLayout inputLayout_username, inputLayout_password;
     private ProgressBar progressBar;
-    String email, driver_name, driver_id, url, getUserAssociatedEntity;
+    String email, getUserAssociatedEntity;
+    SharedPreferences pref;
+    SharedPreferences.Editor editor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +56,8 @@ public class LoginActivity extends AppCompatActivity {
         progressBar = (ProgressBar) findViewById(R.id.loader);
         edit_username.addTextChangedListener(new MyTextWatcher(edit_username));
         edit_password.addTextChangedListener(new MyTextWatcher(edit_password));
+        pref = getApplicationContext().getSharedPreferences("TAG", MODE_PRIVATE);
+
 
         progressBar.setVisibility(View.GONE);
         if (LoginUtils.isUserLogin(getApplicationContext())) {
@@ -71,6 +76,7 @@ public class LoginActivity extends AppCompatActivity {
 
 
     }
+
     private void submit() {
         if (!validateName())
             return;
@@ -79,8 +85,8 @@ public class LoginActivity extends AppCompatActivity {
 
         progressBar.setVisibility(View.VISIBLE);
 
-        String username = edit_username.getText().toString(); //    "driver1@kotal.com"
-        String password = edit_password.getText().toString();//    "driver@2017"
+        String username = edit_username.getText().toString(); //    "driver@kotal.com"
+        String password = edit_password.getText().toString();//    "hypernym123"
 
         HashMap<String, Object> body = new HashMap<>();
         body.put("email", username);
@@ -103,32 +109,10 @@ public class LoginActivity extends AppCompatActivity {
                             LoginUtils.userLoggedIn(LoginActivity.this);
                             Log.d("TAAAG", "" + LoginUtils.getUserToken(getApplicationContext()));
                             getUserAssociatedEntity = response.body().response.getAssociatedEntity().toString();
-//                    ApiInterface.retrofit.getprofile(Integer.parseInt(getUserAssociatedEntity)).enqueue(new Callback<WebAPIResponse<Profile>>() {
-//                        @Override
-//                        public void onResponse(Call<WebAPIResponse<Profile>> call, Response<WebAPIResponse<Profile>> response) {
-//                            if (response.body().status) {
-//
-//
-//                                url = response.body().response.getPhoto();
-//                                driver_name = response.body().response.getName();
-//                                driver_id = Integer.toString(response.body().response.getId());
                             email = response.body().response.getEmail();
-//                            editor = pref.edit();
-//                            editor.putString("Email", email);
-////                                editor.putString("Url", url);
-////                                editor.putString("Name", driver_name);
-////                                editor.putString("Id", driver_id);
-//                            editor.commit();
-
-                            //      Glide.with(getApplicationContext()).load(url).into(img_profile);
-//                            }
-//                        }
-
-//                        @Override
-//                        public void onFailure(Call<WebAPIResponse<Profile>> call, Throwable t) {
-//                        }
-//                    });
-
+                            editor = pref.edit();
+                            editor.putString("Email", email);
+                            editor.commit();
 
                             Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
                             startActivity(intent);
@@ -144,8 +128,7 @@ public class LoginActivity extends AppCompatActivity {
                         }
 
 
-                    }
-                    catch (Exception ex) {
+                    } catch (Exception ex) {
                         progressBar.setVisibility(View.GONE);
                         Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "Establish Network Connection!", Snackbar.LENGTH_LONG);
                         View view = snackbar.getView();
@@ -207,8 +190,6 @@ public class LoginActivity extends AppCompatActivity {
             getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
         }
     }
-
-
 
 
     private class MyTextWatcher implements TextWatcher {

@@ -1,5 +1,6 @@
 package com.hypernymbiz.logistics.api;
 
+import com.hypernymbiz.logistics.model.Profile;
 import com.hypernymbiz.logistics.model.User;
 import com.hypernymbiz.logistics.model.WebAPIResponse;
 import com.hypernymbiz.logistics.toolbox.MyApplication;
@@ -18,7 +19,9 @@ import retrofit2.Call;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.Body;
+import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.Query;
 
 /**
  * Created by Metis on 22-Mar-18.
@@ -35,6 +38,9 @@ public interface ApiInterface {
 
     @POST("api/users/login/")
     Call<WebAPIResponse<User>> loginUser(@Body HashMap<String, Object> body);
+
+    @GET("iof/get_driver_info/")
+    Call<WebAPIResponse<Profile>> getprofile(@Query("driver_id") int driver_id);
 
 
     class MyOkHttpClient {
