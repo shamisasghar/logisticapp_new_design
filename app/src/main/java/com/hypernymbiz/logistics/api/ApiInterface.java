@@ -1,5 +1,7 @@
 package com.hypernymbiz.logistics.api;
 
+import com.hypernymbiz.logistics.model.JobCount;
+import com.hypernymbiz.logistics.model.JobInfo;
 import com.hypernymbiz.logistics.model.Profile;
 import com.hypernymbiz.logistics.model.User;
 import com.hypernymbiz.logistics.model.WebAPIResponse;
@@ -8,6 +10,7 @@ import com.hypernymbiz.logistics.utils.LoginUtils;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.Interceptor;
@@ -20,6 +23,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.PATCH;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
 
@@ -41,6 +45,13 @@ public interface ApiInterface {
 
     @GET("iof/get_driver_info/")
     Call<WebAPIResponse<Profile>> getprofile(@Query("driver_id") int driver_id);
+    @PATCH("hypernet/notifications/update_alert_flag_status/")
+    Call<WebAPIResponse<String>> getcountpatch();
+    @GET("iof/get_notifications")
+    Call<WebAPIResponse<List<JobInfo>>> getallpendingdata(@Query("driver_id") int driver_id);
+    @GET("hypernet/notifications/get_user_alerts_count")
+    Call<WebAPIResponse<List<JobCount>>> getcount();
+
 
 
     class MyOkHttpClient {

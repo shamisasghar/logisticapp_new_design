@@ -3,6 +3,7 @@ package com.hypernymbiz.logistics.fragments;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.location.Location;
@@ -26,6 +27,9 @@ import android.widget.Toast;
 
 import com.hypernymbiz.logistics.FrameActivity;
 import com.hypernymbiz.logistics.R;
+import com.hypernymbiz.logistics.api.ApiInterface;
+import com.hypernymbiz.logistics.model.JobCount;
+import com.hypernymbiz.logistics.model.WebAPIResponse;
 import com.hypernymbiz.logistics.toolbox.ToolbarListener;
 
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -37,6 +41,14 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.hypernymbiz.logistics.utils.ActivityUtils;
+import com.hypernymbiz.logistics.utils.AppUtils;
+import com.hypernymbiz.logistics.utils.Constants;
+
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by Bilal Rashid on 10/10/2017.
@@ -58,6 +70,7 @@ View view;
     Marker marker, marker2, marker3;
     EditText editText;
     ImageButton img;
+    String size;
 
     Location location;
     LatLng ll;
@@ -68,9 +81,13 @@ View view;
     private final int REQ_CODE_SPEECH_INPUT = 100;
     TextView mNumberOfCartItemsText;
     LinearLayout linear_job,linear_maintenance,linear_violation,linear_inprogress;
-
-
     LocationRequest locationRequest;
+
+
+    public static void startActivity(Context context) {
+        context.startActivity(new Intent(context, HomeFragment.class));
+    }
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -98,11 +115,10 @@ View view;
         View view = menu.findItem(R.id.notification_bell).getActionView();
         mNumberOfCartItemsText = (TextView) view.findViewById(R.id.text_number_of_cart_items);
 
-
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ActivityUtils.startActivity(getActivity(), FrameActivity.class, JobDetailsFragment.class.getName(), null);
+                ActivityUtils.startActivity(getActivity(), FrameActivity.class, JobNotificationFragment.class.getName(), null);
             }
         });
     }
@@ -172,6 +188,47 @@ View view;
 
 
     }
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        ApiInterface.retrofit.getcount().enqueue(new Callback<WebAPIResponse<List<JobCount>>>() {
+            @Override
+            public void onResponse(Call<WebAPIResponse<List<JobCount>>> call, Response<WebAPIResponse<List<JobCount>>> response) {
+                // dialog.dismiss();
+                if (response.isSuccessful()) {
+                    if (response.body().status) {
+                        size = String.valueOf(response.body().response.get(0).getCount());
+                        if (size != null) {
+                            try {
+                                mNumberOfCartItemsText.setText(size);
+                            } catch (Exception ex) {
+
+                            }
+                        }
+
+                    }
+
+                } else {
+                    //  dialog.dismiss();
+                    AppUtils.showSnackBar(getView(), AppUtils.getErrorMessage(getContext(), 2));
+
+                }
+                //   Toast.makeText(getActivity(),response.body().response.get(0).getCount(), Toast.LENGTH_SHORT).show();
+//                mNumberOfCartItemsText.setText("000");
+            }
+
+            @Override
+            public void onFailure(Call<WebAPIResponse<List<JobCount>>> call, Throwable t) {
+                //   dialog.dismiss();
+                AppUtils.showSnackBar(getView(), AppUtils.getErrorMessage(getContext(), Constants.NETWORK_ERROR));
+
+            }
+        });
+
+    }
+
 
 
 
