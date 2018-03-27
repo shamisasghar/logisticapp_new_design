@@ -18,6 +18,7 @@ import android.view.View;
 import com.hypernymbiz.logistics.dialog.SimpleDialog;
 import com.hypernymbiz.logistics.fragments.HomeFragment;
 import com.hypernymbiz.logistics.fragments.JobFragment;
+import com.hypernymbiz.logistics.fragments.JobNotificationFragment;
 import com.hypernymbiz.logistics.fragments.MaintenanceFragment;
 import com.hypernymbiz.logistics.fragments.ProfileFragment;
 import com.hypernymbiz.logistics.toolbox.ToolbarListener;
@@ -67,7 +68,12 @@ public class HomeActivity extends AppCompatActivity implements ToolbarListener,O
     }
 
     public void addFragment(final Fragment fragment) {
-        getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
+        if(fragment.getClass().getName().equals(HomeFragment.class.getName())){
+            getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
+        }else {
+            getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment).addToBackStack(fragment.getClass().getName()
+            ).commit();
+        }
     }
 
     public void toolbarSetup() {
@@ -97,7 +103,9 @@ public class HomeActivity extends AppCompatActivity implements ToolbarListener,O
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            mSimpleDialog = new SimpleDialog(this, null, getString(R.string.msg_exit),
+            Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.container);
+            if(fragment instanceof HomeFragment){
+                mSimpleDialog = new SimpleDialog(this, null, getString(R.string.msg_exit),
                     getString(R.string.button_cancel), getString(R.string.button_ok), new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -113,6 +121,26 @@ public class HomeActivity extends AppCompatActivity implements ToolbarListener,O
                 }
             });
             mSimpleDialog.show();
+            }else {
+                super.onBackPressed();
+            }
+
+//            mSimpleDialog = new SimpleDialog(this, null, getString(R.string.msg_exit),
+//                    getString(R.string.button_cancel), getString(R.string.button_ok), new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    switch (view.getId()) {
+//                        case R.id.button_positive:
+//                            mSimpleDialog.dismiss();
+//                            HomeActivity.this.finish();
+//                            break;
+//                        case R.id.button_negative:
+//                            mSimpleDialog.dismiss();
+//                            break;
+//                    }
+//                }
+//            });
+//            mSimpleDialog.show();
         }
 
     }
@@ -190,6 +218,7 @@ public class HomeActivity extends AppCompatActivity implements ToolbarListener,O
                 return true;
             }
             addFragment(new JobFragment());
+
         }
 
         else if (id == R.id.profile) {
@@ -215,6 +244,28 @@ public class HomeActivity extends AppCompatActivity implements ToolbarListener,O
         addFragment(new ProfileFragment());
     }
         else if (id == R.id.maintenance) {
+                if (!AppUtils.isInternetAvailable(this)) {
+                    mSimpleDialog = new SimpleDialog(this, getString(R.string.title_internet), getString(R.string.msg_internet),
+                            getString(R.string.button_cancel), getString(R.string.button_ok), new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            switch (view.getId()) {
+                                case R.id.button_positive:
+                                    mSimpleDialog.dismiss();
+                                    ActivityUtils.startWifiSettings(HomeActivity.this);
+                                    break;
+                                case R.id.button_negative:
+                                    mSimpleDialog.dismiss();
+                                    break;
+                            }
+                        }
+                    });
+                    mSimpleDialog.show();
+                    return true;
+                }
+                addFragment(new MaintenanceFragment());
+        }
+        else if (id == R.id.notification) {
             if (!AppUtils.isInternetAvailable(this)) {
                 mSimpleDialog = new SimpleDialog(this, getString(R.string.title_internet), getString(R.string.msg_internet),
                         getString(R.string.button_cancel), getString(R.string.button_ok), new View.OnClickListener() {
@@ -234,10 +285,14 @@ public class HomeActivity extends AppCompatActivity implements ToolbarListener,O
                 mSimpleDialog.show();
                 return true;
             }
-            addFragment(new MaintenanceFragment());
-
+            ActivityUtils.startActivity(this,FrameActivity.class,JobNotificationFragment.class.getName(),null);
 
         }
+
+
+
+
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;

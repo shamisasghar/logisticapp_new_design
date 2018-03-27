@@ -30,6 +30,8 @@ public class MaintenanceFragment extends Fragment implements View.OnClickListene
     private SectionsPagerAdapter sectionsPagerAdapter;
     TextView mNumberOfCartItemsText;
 
+    Context mContext;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,6 +62,7 @@ public class MaintenanceFragment extends Fragment implements View.OnClickListene
         if (context instanceof ToolbarListener) {
             ((ToolbarListener) context).setTitle("Maintenance");
         }
+        mContext=context;
     }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -122,6 +125,12 @@ public class MaintenanceFragment extends Fragment implements View.OnClickListene
 
     }
 
-
-
+    @Override
+    public void onResume()
+    {
+        if (mContext instanceof ToolbarListener) {
+            ((ToolbarListener) mContext).setTitle("Maintenance");
+        }
+        super.onResume();
+    }
 }

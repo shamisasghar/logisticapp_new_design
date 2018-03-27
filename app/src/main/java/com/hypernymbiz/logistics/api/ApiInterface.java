@@ -1,8 +1,12 @@
 package com.hypernymbiz.logistics.api;
 
 import com.hypernymbiz.logistics.model.JobCount;
+import com.hypernymbiz.logistics.model.JobDetail;
 import com.hypernymbiz.logistics.model.JobInfo;
+import com.hypernymbiz.logistics.model.Maintenance;
+import com.hypernymbiz.logistics.model.MaintenanceUpdate;
 import com.hypernymbiz.logistics.model.Profile;
+import com.hypernymbiz.logistics.model.StartJob;
 import com.hypernymbiz.logistics.model.User;
 import com.hypernymbiz.logistics.model.WebAPIResponse;
 import com.hypernymbiz.logistics.toolbox.MyApplication;
@@ -25,6 +29,7 @@ import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.PATCH;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Query;
 
 /**
@@ -52,7 +57,18 @@ public interface ApiInterface {
     @GET("hypernet/notifications/get_user_alerts_count")
     Call<WebAPIResponse<List<JobCount>>> getcount();
 
+    @PUT("iof/driver_job_update")
+    Call<WebAPIResponse<StartJob>> startjob(@Body HashMap<String, Object> body);
+    @PUT("iof/driver_job_update")
+    Call<WebAPIResponse<StartJob>> canceljob(@Body HashMap<String, Object> body);
 
+    @GET("iof/get_app_jobs/")
+    Call<WebAPIResponse<JobDetail>> getalldata(@Query("job_id") int job_id);
+    @GET("iof/get_app_maintenances/")
+    Call<WebAPIResponse<Maintenance>> getmaintenancedata(@Query("driver_id") int driver_id, @Query("m_id") int maintenance_id);
+
+    @PUT("iof/maintenance_update")
+    Call<WebAPIResponse<MaintenanceUpdate>> maintenanceupdate(@Body HashMap<String, Object> body);
 
     class MyOkHttpClient {
 

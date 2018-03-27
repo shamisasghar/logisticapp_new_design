@@ -51,7 +51,7 @@ public class JobNotificationFragment extends Fragment {
         super.onAttach(context);
         fContext = context;
         if (context instanceof ToolbarListener) {
-            ((ToolbarListener) context).setTitle("Job Notification");
+            ((ToolbarListener) context).setTitle("Notification");
         }
     }
 

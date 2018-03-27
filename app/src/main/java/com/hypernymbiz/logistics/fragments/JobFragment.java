@@ -28,6 +28,7 @@ public class JobFragment extends Fragment implements View.OnClickListener, Toolb
     private ViewPager mViewPager;
     TextView mNumberOfCartItemsText;
     private SectionsPagerAdapter sectionsPagerAdapter;
+    Context mContext;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -41,6 +42,7 @@ public class JobFragment extends Fragment implements View.OnClickListener, Toolb
         if (context instanceof ToolbarListener) {
             ((ToolbarListener) context).setTitle("Jobs");
         }
+        mContext=context;
     }
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -117,5 +119,14 @@ public class JobFragment extends Fragment implements View.OnClickListener, Toolb
             return null;
         }
 
+    }
+
+    @Override
+    public void onResume() {
+        if (mContext instanceof ToolbarListener) {
+            ((ToolbarListener) mContext).setTitle("Jobs");
+        }
+
+        super.onResume();
     }
 }

@@ -47,6 +47,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener, T
     SharedPreferences pref;
     String getUserAssociatedEntity, Email, Driver_name, Driver_id, Driver_photo;
     CircleImageView img_profile;
+    Context mContext;
 //    LoadingDialog dialog;
 
     @Override
@@ -61,6 +62,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener, T
         if (context instanceof ToolbarListener) {
             ((ToolbarListener) context).setTitle("Profile");
         }
+        mContext=context;
     }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -168,9 +170,11 @@ public class ProfileFragment extends Fragment implements View.OnClickListener, T
         }
     }
 
-
     @Override
     public void onResume() {
+        if (mContext instanceof ToolbarListener) {
+            ((ToolbarListener) mContext).setTitle("Profile");
+        }
         super.onResume();
         //  EventBus.getDefault().post(new DrawerItemSelectedEvent(getString(R.string.drawer_profile)));
     }

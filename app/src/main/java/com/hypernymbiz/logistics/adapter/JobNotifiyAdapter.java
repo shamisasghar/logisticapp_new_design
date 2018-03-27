@@ -14,7 +14,9 @@ import android.widget.Toast;
 import com.hypernymbiz.logistics.FrameActivity;
 import com.hypernymbiz.logistics.R;
 import com.hypernymbiz.logistics.fragments.JobDetailsFragment;
+import com.hypernymbiz.logistics.fragments.MaintenanceDetailFragment;
 import com.hypernymbiz.logistics.model.JobInfo;
+import com.hypernymbiz.logistics.utils.AppUtils;
 import com.hypernymbiz.logistics.utils.Constants;
 
 import java.util.List;
@@ -44,6 +46,9 @@ public class JobNotifiyAdapter extends RecyclerView.Adapter<JobNotifiyAdapter.Vi
     public void onBindViewHolder(final JobNotifiyAdapter.ViewHolder holder, final int position) {
 
         holder.job.setText(jobInfo_s.get(position).getJobName());
+        holder.notification_name.setText(Integer.toString(jobInfo_s.get(position).getNotificationId()));
+        holder.create_time.setText(AppUtils.getTime(jobInfo_s.get(position).getCreatedTime()));
+       holder.create_date.setText(jobInfo_s.get(position).getCreatedDatetime());
 
 
 
@@ -59,21 +64,21 @@ public class JobNotifiyAdapter extends RecyclerView.Adapter<JobNotifiyAdapter.Vi
 
 
                 Toast.makeText(context, ""+id.toString(), Toast.LENGTH_SHORT).show();
-//                if(jobInfo_s.get(position).getJobType()==9)
-//                {
-//                    Intent intent = new Intent(context, FrameActivity.class);
-//                    intent.putExtra("jobid", Integer.toString(id));
-//                    intent.putExtra(Constants.FRAGMENT_NAME, MaintenanceDetailFragment.class.getName());
-//                    context.startActivity(intent);
-//
-//                }
-//                else {
+                if(jobInfo_s.get(position).getJobType()==9)
+                {
+                    Intent intent = new Intent(context, FrameActivity.class);
+                    intent.putExtra("jobid", Integer.toString(id));
+                    intent.putExtra(Constants.FRAGMENT_NAME, MaintenanceDetailFragment.class.getName());
+                    context.startActivity(intent);
+
+                }
+                else {
                     Intent intent = new Intent(context, FrameActivity.class);
                     intent.putExtra("jobid", Integer.toString(id));
                     intent.putExtra(Constants.FRAGMENT_NAME, JobDetailsFragment.class.getName());
 //                    intent.putExtra(Constants.DATA, bundle);
                     context.startActivity(intent);
-//                }
+                }
             }
 
         });
@@ -91,7 +96,7 @@ public class JobNotifiyAdapter extends RecyclerView.Adapter<JobNotifiyAdapter.Vi
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView job;
+        TextView job,notification_name,create_date,create_time;
         ImageView imageView;
         CardView cardView;
         int pos=getAdapterPosition();
@@ -100,9 +105,12 @@ public class JobNotifiyAdapter extends RecyclerView.Adapter<JobNotifiyAdapter.Vi
             super(itemView);
 
             job = (TextView) itemView.findViewById(R.id.jobname);
-            imageView = (ImageView) itemView.findViewById(R.id.image);
+            notification_name = (TextView) itemView.findViewById(R.id.txt_notification_id);
+            create_time = (TextView) itemView.findViewById(R.id.txt_job_time);
+            create_date = (TextView) itemView.findViewById(R.id.txt_job_date);
+//            imageView = (ImageView) itemView.findViewById(R.id.image);
             cardView = (CardView) itemView.findViewById(R.id.layout_cardview);
-            String j = job.getText().toString();
+
 
         }
 

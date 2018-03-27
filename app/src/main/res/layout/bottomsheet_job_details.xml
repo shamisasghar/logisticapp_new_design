@@ -8,7 +8,6 @@
     android:orientation="vertical"
     app:behavior_hideable="false"
     app:behavior_peekHeight="56dp"
-
     app:layout_behavior="android.support.design.widget.BottomSheetBehavior">
 
     <RelativeLayout
@@ -18,7 +17,7 @@
         android:orientation="horizontal">
 
         <TextView
-            android:id="@+id/lbl_job_status"
+            android:id="@+id/txt_job_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="18dp"
@@ -56,6 +55,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:id="@+id/txt_from_address"
                     android:text="From Address:"/>
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -64,12 +64,13 @@
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:text="Deparrture Time"
+                        android:text="Departure Time"
                         android:layout_weight="0.2"/>
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:text="9:00 AM"
+                        android:id="@+id/txt_starttime"
                         android:layout_weight="0.3"/>
                 </LinearLayout>
             </LinearLayout>
@@ -102,7 +103,8 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="To Address:"/>
+                    android:text="To Address:"
+                    android:id="@+id/txt_to_address"/>
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
@@ -115,6 +117,7 @@
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:id="@+id/txt_endtime"
                         android:text="9:00 AM"
                         android:layout_weight="0.3"/>
                 </LinearLayout>
@@ -133,25 +136,27 @@
                 android:layout_height="wrap_content">
 
                 <Button
-                    android:id="@+id/btn_start"
+                    android:id="@+id/btn_startjob"
                     android:layout_width="130dp"
                     android:layout_height="40dp"
                     android:layout_marginBottom="10dp"
                     android:background="@drawable/border_orange"
                     android:layout_marginRight="20dp"
-                    android:text="Start"
+                    android:text=""
+                    android:hint="Start"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toLeftOf="@+id/btn_cancel"
+                    app:layout_constraintRight_toLeftOf="@+id/btn_canceljob"
                     app:layout_constraintTop_toTopOf="parent"/>
                 <Button
                     android:layout_width="130dp"
-                    android:text="DECLINE"
+                    android:text=""
+                    android:hint="DECLINE"
                     android:background="@drawable/border_orange"
                     android:layout_marginBottom="10dp"
-                    android:id="@+id/btn_cancel"
+                    android:id="@+id/btn_canceljob"
                     android:layout_height="40dp"
-                    app:layout_constraintLeft_toRightOf="@+id/btn_start"
+                    app:layout_constraintLeft_toRightOf="@+id/btn_startjob"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"/>

@@ -59,7 +59,7 @@ public class HomeFragment extends Fragment implements  View.OnClickListener {
 
 
 //    private ViewHolder mHolder;
-View view;
+    View view;
 //    implements View.OnClickListener, OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, com.google.android.gms.location.LocationListener
     MapView mMapView;
     GoogleMap googleMap;
@@ -82,12 +82,12 @@ View view;
     TextView mNumberOfCartItemsText;
     LinearLayout linear_job,linear_maintenance,linear_violation,linear_inprogress;
     LocationRequest locationRequest;
+    Context mContext;
 
 
     public static void startActivity(Context context) {
         context.startActivity(new Intent(context, HomeFragment.class));
     }
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -106,6 +106,7 @@ View view;
         if (context instanceof ToolbarListener) {
             ((ToolbarListener) context).setTitle("Dashboard");
         }
+        mContext = context;
     }
 
     @Override
@@ -128,7 +129,6 @@ View view;
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
          view = inflater.inflate(R.layout.fragment_home, container, false);
         coordinatorLayout = (CoordinatorLayout) view.findViewById(R.id.coordinator);
-
         linear_job=(LinearLayout)view.findViewById(R.id.layout_linear_job);
         linear_maintenance=(LinearLayout)view.findViewById(R.id.layout_linear_maintenance);
         linear_violation=(LinearLayout)view.findViewById(R.id.layout_linear_violation);
@@ -179,10 +179,6 @@ View view;
 //        mMapView.getMapAsync(this);
 
 
-
-
-
-
         return view;
 
 
@@ -193,6 +189,9 @@ View view;
     @Override
     public void onResume() {
         super.onResume();
+        if (mContext instanceof ToolbarListener) {
+            ((ToolbarListener) mContext).setTitle("Dashboard");
+        }
         ApiInterface.retrofit.getcount().enqueue(new Callback<WebAPIResponse<List<JobCount>>>() {
             @Override
             public void onResponse(Call<WebAPIResponse<List<JobCount>>> call, Response<WebAPIResponse<List<JobCount>>> response) {

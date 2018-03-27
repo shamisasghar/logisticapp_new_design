@@ -10,6 +10,8 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Color;
+import android.location.Address;
+import android.location.Geocoder;
 import android.media.RingtoneManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -32,12 +34,14 @@ import android.widget.Toast;
 import com.hypernymbiz.logistics.R;
 
 import java.io.File;
+import java.io.IOException;
 import java.security.SecureRandom;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.TimeZone;
 
 
@@ -105,7 +109,49 @@ public class AppUtils {
         return "Monday, Jan 01, 2016";
     }
 
-    public static String getTime(String date) {
+
+    public static String getAddress(double lat, double lng,Context context) {
+        Geocoder geocoder = new Geocoder(context, Locale.getDefault());
+        String add=null;
+        List<Address> addresses = null;
+        try {
+            addresses = geocoder.getFromLocation(lat, lng, 1);
+
+            Address obj = addresses.get(0);
+            add= obj.getAddressLine(0);
+//            add = add + "\n" + obj.getCountryName();
+//            add = add + "\n" + obj.getCountryCode();
+//            add = add + "\n" + obj.getAdminArea();
+//            add = add + "\n" + obj.getPostalCode();
+//            add = add + "\n" + obj.getSubAdminArea();
+//            add = add + "\n" + obj.getLocality();
+//            add = add + "\n" + obj.getSubThoroughfare();
+
+            Log.v("IGA", "Address" + add);
+            // Toast.makeText(this, "Address=>" + add,
+            // Toast.LENGTH_SHORT).show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return add;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    public static String getTimedate(String date) {
         if (date != null) {
             date = date.replace("T", " ");
             date = date.replace("z", "");
@@ -124,6 +170,29 @@ public class AppUtils {
         }
         return "00:00 am";
     }
+
+
+    public static String getTime(String date) {
+        if (date != null) {
+            date = date.replace("T", " ");
+            date = date.replace("z", "");
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm:ss");
+            try {
+                Date serverDate = simpleDateFormat.parse(date);
+                Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+                calendar.setTime(serverDate);
+                calendar.add(Calendar.MILLISECOND,
+                        TimeZone.getDefault().getRawOffset() + TimeZone.getDefault().getDSTSavings());
+                SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm a");
+                return dateFormat.format(calendar.getTime());
+            } catch (Exception e) {
+                Log.e(">> Date Exception", e.getMessage());
+            }
+        }
+        return "00:00 am";
+    }
+
+
 
     public static boolean isCurrentOrder(String date) {
         date = date.replace("T", " ");
@@ -268,7 +337,7 @@ public class AppUtils {
                 context, requestCode, intent, PendingIntent.FLAG_UPDATE_CURRENT
         );
         Notification notification = new NotificationCompat.Builder(context)
-//                .setSmallIcon(getNotificationIcon())
+                .setSmallIcon(getNotificationIcon())
                 .setTicker(message)
                // .setColor(ContextCompat.getColor(context, R.color.colorNotificationIcon))
                 .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
@@ -328,10 +397,10 @@ public class AppUtils {
         }
     }
 
-//    private static int getNotificationIcon() {
-//        boolean useWhiteIcon = (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP);
-//        return useWhiteIcon ? R.drawable.ic_stat_onesignal_default : R.mipmap.ic_launcher;
-//    }
+    private static int getNotificationIcon() {
+        boolean useWhiteIcon = (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP);
+        return useWhiteIcon ? R.drawable.ic_check : R.mipmap.ic_launcher;
+    }
 
  public static String getErrorMessage(Context context, int statusCode) {
         String message = null;

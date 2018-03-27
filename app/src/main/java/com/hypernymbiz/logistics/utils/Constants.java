@@ -33,6 +33,9 @@ public class Constants {
     public static final int NETWORK_ERROR = 1;
     public static final String CLEAR_CACHE = "clear_cache";
     public static final float ImageThumbnailSize = 0.05f;
+    public static final String AUTH_TOKEN = "Token";
+    public static final String PAYLOAD = "pay_load";
+
     // Paytabs
     public static final String pt_shared_prefs_name = "coffee_shop_shared";
 }

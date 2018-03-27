@@ -29,6 +29,12 @@
             android:icon="@drawable/home"
             android:title="Maintenance" />
     </group>
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/notification"
+            android:icon="@drawable/home"
+            android:title="Notification" />
+    </group>
 
 
 </menu>
