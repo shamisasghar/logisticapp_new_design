@@ -58,15 +58,17 @@
             android:orientation="horizontal"
             android:layout_gravity="center">
             <ImageView
-                android:layout_width="100dp"
+                android:layout_width="80dp"
                 android:layout_height="80dp"
                 android:tint="@color/colorPrimary"
-                android:src="@drawable/ic_check" />
+                android:src="@drawable/ic_check"
+                android:id="@+id/img_ok"/>
             <ImageView
-                android:layout_width="100dp"
+                android:layout_width="80dp"
                 android:layout_height="80dp"
                 android:tint="@color/colorPrimary"
                 android:src="@drawable/ic_cancel"
+                android:id="@+id/img_cancel"
                 />
 
         </LinearLayout>

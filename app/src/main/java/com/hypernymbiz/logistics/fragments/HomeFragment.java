@@ -1,17 +1,23 @@
 package com.hypernymbiz.logistics.fragments;
 
 
+import android.Manifest;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.location.Location;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -25,9 +31,19 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.MapsInitializer;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.PolylineOptions;
 import com.hypernymbiz.logistics.FrameActivity;
 import com.hypernymbiz.logistics.R;
 import com.hypernymbiz.logistics.api.ApiInterface;
+import com.hypernymbiz.logistics.model.ActiveJobResume;
+import com.hypernymbiz.logistics.model.DirectionsJSONParser;
 import com.hypernymbiz.logistics.model.JobCount;
 import com.hypernymbiz.logistics.model.WebAPIResponse;
 import com.hypernymbiz.logistics.toolbox.ToolbarListener;
@@ -40,10 +56,21 @@ import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
+import com.hypernymbiz.logistics.utils.ActiveJobUtils;
 import com.hypernymbiz.logistics.utils.ActivityUtils;
 import com.hypernymbiz.logistics.utils.AppUtils;
 import com.hypernymbiz.logistics.utils.Constants;
 
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import retrofit2.Call;
@@ -54,18 +81,17 @@ import retrofit2.Response;
  * Created by Bilal Rashid on 10/10/2017.
  */
 
-public class HomeFragment extends Fragment implements  View.OnClickListener {
+public class HomeFragment extends Fragment  implements View.OnClickListener, OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, com.google.android.gms.location.LocationListener {
 
 
-
-//    private ViewHolder mHolder;
+    //    private ViewHolder mHolder;
     View view;
-//    implements View.OnClickListener, OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, com.google.android.gms.location.LocationListener
+
     MapView mMapView;
     GoogleMap googleMap;
     SupportMapFragment supportMapFragment;
     CoordinatorLayout coordinatorLayout;
-    Dialog complete,cancl;
+    Dialog complete, cancl;
     GoogleApiClient googleApiClient;
     Marker marker, marker2, marker3;
     EditText editText;
@@ -78,11 +104,11 @@ public class HomeFragment extends Fragment implements  View.OnClickListener {
     boolean chk = true;
     CameraUpdate update;
     LatLng dest = new LatLng(33.6689488, 72.9939884);
-    private final int REQ_CODE_SPEECH_INPUT = 100;
     TextView mNumberOfCartItemsText;
-    LinearLayout linear_job,linear_maintenance,linear_violation,linear_inprogress;
+    LinearLayout linear_job, linear_maintenance, linear_violation, linear_inprogress;
     LocationRequest locationRequest;
     Context mContext;
+    CardView mapcardalayout;
 
 
     public static void startActivity(Context context) {
@@ -93,11 +119,15 @@ public class HomeFragment extends Fragment implements  View.OnClickListener {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-
-
+//        boolean checkJobResume=ActiveJobUtils.isJobResumed(getContext());
+//        Toast.makeText(mContext, "checkjob resume status"+Boolean.toString(checkJobResume), Toast.LENGTH_SHORT).show();
 
 //        if (!EventBus.getDefault().isRegistered(this))
 //            EventBus.getDefault().register(this);
+    }
+
+    void setJobResume(){
+
     }
 
     @Override
@@ -125,17 +155,31 @@ public class HomeFragment extends Fragment implements  View.OnClickListener {
     }
 
 
-
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-         view = inflater.inflate(R.layout.fragment_home, container, false);
+        view = inflater.inflate(R.layout.fragment_home, container, false);
         coordinatorLayout = (CoordinatorLayout) view.findViewById(R.id.coordinator);
-        linear_job=(LinearLayout)view.findViewById(R.id.layout_linear_job);
-        linear_maintenance=(LinearLayout)view.findViewById(R.id.layout_linear_maintenance);
-        linear_violation=(LinearLayout)view.findViewById(R.id.layout_linear_violation);
-        linear_inprogress=(LinearLayout)view.findViewById(R.id.layout_linear_inprogress);
+        linear_job = (LinearLayout) view.findViewById(R.id.layout_linear_job);
+        mapcardalayout = (CardView) view.findViewById(R.id.cardviewhome_map);
+        linear_maintenance = (LinearLayout) view.findViewById(R.id.layout_linear_maintenance);
+        linear_violation = (LinearLayout) view.findViewById(R.id.layout_linear_violation);
+        linear_inprogress = (LinearLayout) view.findViewById(R.id.layout_linear_inprogress);
+
+        if (!ActiveJobUtils.isJobResumed(getContext())){
+            linear_inprogress.setVisibility(View.GONE);
+            mapcardalayout.setMinimumHeight(300);
+        }
+        else{
+            linear_inprogress.setVisibility(View.VISIBLE);
+            ActiveJobResume activeJobResume=ActiveJobUtils.getJobResume(getContext());
+            String startAddress = AppUtils.getAddress(activeJobResume.getSlat(), activeJobResume.getSlong(), getContext());
+            String endAddress = AppUtils.getAddress(activeJobResume.getElat(), activeJobResume.getElong(), getContext());
+
+        }
+
+
 
         supportMapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.mapView);
-  //      init_persistent_bottomsheet();
+        //      init_persistent_bottomsheet();
 
         linear_job.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -172,8 +216,8 @@ public class HomeFragment extends Fragment implements  View.OnClickListener {
         });
 
 
-//        buildGoogleApiClient();
-//        initMap();
+        buildGoogleApiClient();
+        initMap();
 
 
 //        mMapView.getMapAsync(this);
@@ -182,13 +226,22 @@ public class HomeFragment extends Fragment implements  View.OnClickListener {
         return view;
 
 
-
     }
 
 
     @Override
     public void onResume() {
         super.onResume();
+        if (!ActiveJobUtils.isJobResumed(getContext())){
+            linear_inprogress.setVisibility(View.GONE);
+
+        }
+        else{
+            linear_inprogress.setVisibility(View.VISIBLE);
+            ActiveJobResume activeJobResume=ActiveJobUtils.getJobResume(getContext());
+            String startAddress = AppUtils.getAddress(activeJobResume.getSlat(), activeJobResume.getSlong(), getContext());
+            String endAddress = AppUtils.getAddress(activeJobResume.getElat(), activeJobResume.getElong(), getContext());
+        }
         if (mContext instanceof ToolbarListener) {
             ((ToolbarListener) mContext).setTitle("Dashboard");
         }
@@ -229,17 +282,6 @@ public class HomeFragment extends Fragment implements  View.OnClickListener {
     }
 
 
-
-
-
-
-
-
-
-
-
-
-
     public void init_persistent_bottomsheet() {
         View persistentbottomSheet = coordinatorLayout.findViewById(R.id.bottomsheet);
 //        iv_trigger = (ImageView) persistentbottomSheet.findViewById(R.id.iv_fab);
@@ -249,11 +291,11 @@ public class HomeFragment extends Fragment implements  View.OnClickListener {
 //        iv_trigger.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View view) {
-                if (behavior.getState() == BottomSheetBehavior.STATE_COLLAPSED) {
-                    behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
-               } else {
-                  behavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-                }
+        if (behavior.getState() == BottomSheetBehavior.STATE_COLLAPSED) {
+            behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+        } else {
+            behavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+        }
 //            }
 //        });
         if (behavior != null)
@@ -299,36 +341,37 @@ public class HomeFragment extends Fragment implements  View.OnClickListener {
 //        Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
 //        toolbar.setOnClickListener(this);
 //    }
-    }
+
 
 //    @Override
 //    public void onClick(View view) {
 //        ActivityUtils.startActivity(getActivity(), FrameActivity.class, HomeFragment.class.getName(), null);
 //
 //    }
-//    protected synchronized void buildGoogleApiClient() {
-//        googleApiClient = new GoogleApiClient.Builder(getContext())
-//                .addApi(LocationServices.API)
-//                .addConnectionCallbacks(this)
-//                .addOnConnectionFailedListener(this).build();
-//        googleApiClient.connect();
-//    }
-//    @Override
-//    public void onMapReady(final GoogleMap googleMap) {
-////        Toast.makeText(getActivity(), "alksdfj", Toast.LENGTH_SHORT).show();
-////        init();
-//        final MarkerOptions option;
-//       googleMap.clear();
-//        if (marker != null) {
-//
-//            marker.remove();
-//        }
-//        MapsInitializer.initialize(getContext());
-//        this.googleMap = googleMap;
-////        googleMap.clear();
-//        googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+    protected synchronized void buildGoogleApiClient() {
+        googleApiClient = new GoogleApiClient.Builder(getContext())
+                .addApi(LocationServices.API)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this).build();
+        googleApiClient.connect();
+    }
 
-//
+    @Override
+    public void onMapReady(final GoogleMap googleMap) {
+//        Toast.makeText(getActivity(), "alksdfj", Toast.LENGTH_SHORT).show();
+
+        final MarkerOptions option;
+       googleMap.clear();
+        if (marker != null) {
+
+            marker.remove();
+        }
+        MapsInitializer.initialize(getContext());
+        this.googleMap = googleMap;
+//        googleMap.clear();
+        googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+
+
 //        button.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {
@@ -336,7 +379,6 @@ public class HomeFragment extends Fragment implements  View.OnClickListener {
 //                googleMap.animateCamera(update);
 //            }
 //        });
-
 
 
 //        button.setOnClickListener(new View.OnClickListener() {
@@ -354,221 +396,230 @@ public class HomeFragment extends Fragment implements  View.OnClickListener {
 //                }
 //            }
 //        });
-//        MarkerOptions sss;
-//        sss = new MarkerOptions().title("fuel").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)).position(new LatLng(33.6689488, 72.9939884));
-//        marker3 = googleMap.addMarker(sss);
-//
-//        if (ll!=null) {
-//            if(chk==true) {
-//                CameraUpdate update = CameraUpdateFactory.newLatLngZoom(ll, 15.8f);
-//                googleMap.animateCamera(update);
-//                chk =false;
-//            }
-//            option = new MarkerOptions().title("location").position(new LatLng(ll.latitude, ll.longitude));
-//            marker = googleMap.addMarker(option);
-////            Toast.makeText(getActivity(), "location has been get"+Double.toString(ll.latitude), Toast.LENGTH_SHORT).show();
-//            String url = getDirectionsUrl(ll, dest);
-//            FetchUrl FetchUrl = new FetchUrl();
-//            FetchUrl.execute(url);
-//        }
-//
-//
-//
-//    }
-//
-//    @Override
-//    public void onConnected(@Nullable Bundle bundle) {
-//        locationRequest = LocationRequest.create();
-//        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-//        locationRequest.setInterval(1000);
-//        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-//
-//            return;
-//        }
-//        LocationServices.FusedLocationApi.requestLocationUpdates(googleApiClient, locationRequest, this);
-//    }
-//
-//    @Override
-//    public void onConnectionSuspended(int i) {
-//
-//    }
-//
-//    @Override
-//    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-//
-//    }
-//
-//    @Override
-//    public void onLocationChanged(final Location location) {
-//
-//
-//
-//       ll = new LatLng(location.getLatitude(), location.getLongitude());
-////        Toast.makeText(getActivity(), "location changed"+Double.toString(ll.latitude), Toast.LENGTH_SHORT).show();
-//
-//        supportMapFragment.getMapAsync(this);
-//
-//
-//    }
-//    private String getDirectionsUrl(LatLng option, LatLng sss) {
-//
-//        // Origin of route
-//        String str_origin = "origin=" + option.latitude + "," + option.longitude;
-//
-//        // Destination of route
-//        String str_dest = "destination=" + sss.latitude + "," + sss.longitude;
-//
-//        // Sensor enabled
-//        String sensor = "sensor=false";
-//
-//        // Building the parameters to the web service
-//        String parameters = str_origin + "&" + str_dest + "&" + sensor;
-//
-//        // Output format
-//        String output = "json";
-//
-//        // Building the url to the web service
-//        String url = "https://maps.googleapis.com/maps/api/directions/" + output + "?" + parameters;
-//
-//        return url;
-//    }
-//    private String downloadUrl(String strUrl) throws IOException {
-//        String data = "";
-//        InputStream iStream = null;
-//        HttpURLConnection urlConnection = null;
-//        try {
-//            URL url = new URL(strUrl);
-//
-//            // Creating an http connection to communicate with url
-//            urlConnection = (HttpURLConnection) url.openConnection();
-//
-//            // Connecting to url
-//            urlConnection.connect();
-//
-//            // Reading data from url
-//            iStream = urlConnection.getInputStream();
-//
-//            BufferedReader br = new BufferedReader(new InputStreamReader(iStream));
-//
-//            StringBuffer sb = new StringBuffer();
-//
-//            String line = "";
-//            while ((line = br.readLine()) != null) {
-//                sb.append(line);
-//            }
-//
-//            data = sb.toString();
-//            br.close();
-//
-//        } catch (Exception e) {
-//        } finally {
-//            iStream.close();
-//            urlConnection.disconnect();
-//        }
-//        return data;
-//    }
-//
+        if (ActiveJobUtils.isJobResumed(getContext())){
+            MarkerOptions sss;
+            sss = new MarkerOptions().title("destination Address").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)).position(new LatLng(ActiveJobUtils.getJobResume(getContext()).getElat(), ActiveJobUtils.getJobResume(getContext()).getElong()));
+            marker3 = googleMap.addMarker(sss);
+        }
+
+        if (ll!=null) {
+            if(chk==true) {
+                CameraUpdate update = CameraUpdateFactory.newLatLngZoom(ll, 15.8f);
+                googleMap.animateCamera(update);
+                chk =false;
+            }
+            option = new MarkerOptions().title("location").position(new LatLng(ll.latitude, ll.longitude));
+            marker = googleMap.addMarker(option);
+//            Toast.makeText(getActivity(), "location has been get"+Double.toString(ll.latitude), Toast.LENGTH_SHORT).show();
+            if (ActiveJobUtils.isJobResumed(getContext())){
+                ActiveJobResume activeJobResume=ActiveJobUtils.getJobResume(getContext());
+
+//                String url = getDirectionsUrl(new LatLng(activeJobResume.getSlat(),activeJobResume.getSlong()), new LatLng(activeJobResume.getElat(),activeJobResume.getElong()));
+                String url = getDirectionsUrl(ll, new LatLng(activeJobResume.getElat(),activeJobResume.getElong()));
+                FetchUrl FetchUrl = new FetchUrl();
+                FetchUrl.execute(url);
+            }
+
+        }
 
 
-//    private class FetchUrl extends AsyncTask<String, Void, String> {
-//
-//        @Override
-//        protected String doInBackground(String... url) {
-//
-//            // For storing data from web service
-//            String data = "";
-//
-//            try {
-//                // Fetching the data from web service
-//                data = downloadUrl(url[0]);
-//            } catch (Exception e) {
-//
-//            }
-//            return data;
-//        }
-//
-//        @Override
-//        protected void onPostExecute(String result) {
-//            super.onPostExecute(result);
-//
-//            HomeFragment.ParserTask parserTask = new HomeFragment.ParserTask();
-//
-//            // Invokes the thread for parsing the JSON data
-//            parserTask.execute(result);
-//
-//        }
-//    }
-//
-//    private class ParserTask extends AsyncTask<String, Integer, List<List<HashMap<String, String>>>> {
-//
-//        @Override
-//        protected List<List<HashMap<String, String>>> doInBackground(String... jsonData) {
-//
-//            JSONObject jObject;
-//            List<List<HashMap<String, String>>> routes = null;
-//
-//            try {
-//                jObject = new JSONObject(jsonData[0]);
-//                DirectionsJSONParser parser = new DirectionsJSONParser();
-//
-//                // Starts parsing data
-//                routes = parser.parse(jObject);
-//
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
-//            return routes;
-//        }
-//
-//        @Override
-//        protected void onPostExecute(List<List<HashMap<String, String>>> result) {
-//            ArrayList<LatLng> points;
-//
-//            PolylineOptions lineOptions = null;
-//            if (result != null) {
-//
-//                // Traversing through all the routes
-//                for (int i = 0; i < result.size(); i++) {
-//                    points = new ArrayList<>();
-//                    lineOptions = new PolylineOptions();
-//                    // Fetching i-th route
-//                    List<HashMap<String, String>> path = result.get(i);
-//                    // Fetching all the points in i-th route
-//                    for (int j = 0; j < path.size(); j++) {
-//                        HashMap<String, String> point = path.get(j);
-//
-//                        double lat = Double.parseDouble(point.get("lat"));
-//                        double lng = Double.parseDouble(point.get("lng"));
-//                        LatLng position = new LatLng(lat, lng);
-//
-//                        points.add(position);
-//                    }
-//
-//                    // Adding all the points in the route to LineOptions
-//                    lineOptions.addAll(points);
-//                    lineOptions.width(10);
-//                    lineOptions.color(R.color.colorPrimary);
-//                }
-//
-//                // Drawing polyline in the Google Map for the i-th route
-//                if (lineOptions != null) {
-//                    googleMap.addPolyline(lineOptions);
-//                } else {
-//                }
-//            }
-//            else {
-//
-//                if(check==true) {
-//                }
-//                check=false;
-//
-//            }
-//        }
-//    }
+
+    }
+
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+        locationRequest = LocationRequest.create();
+        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        locationRequest.setInterval(1000);
+        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+            return;
+        }
+        LocationServices.FusedLocationApi.requestLocationUpdates(googleApiClient, locationRequest, this);
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
+    }
+
+    @Override
+    public void onLocationChanged(final Location location) {
 
 
-//    private void initMap() {
-//        supportMapFragment.getMapAsync(this);
-//
-//    }
 
+       ll = new LatLng(location.getLatitude(), location.getLongitude());
+//        Toast.makeText(getActivity(), "location changed"+Double.toString(ll.latitude), Toast.LENGTH_SHORT).show();
+
+        supportMapFragment.getMapAsync(this);
+
+
+    }
+    private String getDirectionsUrl(LatLng option, LatLng sss) {
+
+        // Origin of route
+        String str_origin = "origin=" + option.latitude + "," + option.longitude;
+
+        // Destination of route
+        String str_dest = "destination=" + sss.latitude + "," + sss.longitude;
+
+        // Sensor enabled
+        String sensor = "sensor=false";
+
+        // Building the parameters to the web service
+        String parameters = str_origin + "&" + str_dest + "&" + sensor;
+
+        // Output format
+        String output = "json";
+
+        // Building the url to the web service
+        String url = "https://maps.googleapis.com/maps/api/directions/" + output + "?" + parameters;
+
+        return url;
+    }
+    private String downloadUrl(String strUrl) throws IOException {
+        String data = "";
+        InputStream iStream = null;
+        HttpURLConnection urlConnection = null;
+        try {
+            URL url = new URL(strUrl);
+
+            // Creating an http connection to communicate with url
+            urlConnection = (HttpURLConnection) url.openConnection();
+
+            // Connecting to url
+            urlConnection.connect();
+
+            // Reading data from url
+            iStream = urlConnection.getInputStream();
+
+            BufferedReader br = new BufferedReader(new InputStreamReader(iStream));
+
+            StringBuffer sb = new StringBuffer();
+
+            String line = "";
+            while ((line = br.readLine()) != null) {
+                sb.append(line);
+            }
+
+            data = sb.toString();
+            br.close();
+
+        } catch (Exception e) {
+        } finally {
+            iStream.close();
+            urlConnection.disconnect();
+        }
+        return data;
+    }
+
+
+
+    private class FetchUrl extends AsyncTask<String, Void, String> {
+
+        @Override
+        protected String doInBackground(String... url) {
+
+            // For storing data from web service
+            String data = "";
+
+            try {
+                // Fetching the data from web service
+                data = downloadUrl(url[0]);
+            } catch (Exception e) {
+
+            }
+            return data;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+
+            HomeFragment.ParserTask parserTask = new HomeFragment.ParserTask();
+
+            // Invokes the thread for parsing the JSON data
+            parserTask.execute(result);
+
+        }
+    }
+
+    private class ParserTask extends AsyncTask<String, Integer, List<List<HashMap<String, String>>>> {
+
+        @Override
+        protected List<List<HashMap<String, String>>> doInBackground(String... jsonData) {
+
+            JSONObject jObject;
+            List<List<HashMap<String, String>>> routes = null;
+
+            try {
+                jObject = new JSONObject(jsonData[0]);
+                DirectionsJSONParser parser = new DirectionsJSONParser();
+
+                // Starts parsing data
+                routes = parser.parse(jObject);
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return routes;
+        }
+
+        @Override
+        protected void onPostExecute(List<List<HashMap<String, String>>> result) {
+            ArrayList<LatLng> points;
+
+            PolylineOptions lineOptions = null;
+            if (result != null) {
+
+                // Traversing through all the routes
+                for (int i = 0; i < result.size(); i++) {
+                    points = new ArrayList<>();
+                    lineOptions = new PolylineOptions();
+                    // Fetching i-th route
+                    List<HashMap<String, String>> path = result.get(i);
+                    // Fetching all the points in i-th route
+                    for (int j = 0; j < path.size(); j++) {
+                        HashMap<String, String> point = path.get(j);
+
+                        double lat = Double.parseDouble(point.get("lat"));
+                        double lng = Double.parseDouble(point.get("lng"));
+                        LatLng position = new LatLng(lat, lng);
+
+                        points.add(position);
+                    }
+
+                    // Adding all the points in the route to LineOptions
+                    lineOptions.addAll(points);
+                    lineOptions.width(10);
+                    lineOptions.color(R.color.colorPrimary);
+                }
+
+                // Drawing polyline in the Google Map for the i-th route
+                if (lineOptions != null) {
+                    googleMap.addPolyline(lineOptions);
+                } else {
+                }
+            }
+            else {
+
+                if(check==true) {
+                }
+                check=false;
+
+            }
+        }
+    }
+
+
+    private void initMap() {
+        supportMapFragment.getMapAsync(this);
+
+    }
+
+}

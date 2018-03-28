@@ -37,11 +37,13 @@ import com.hypernymbiz.logistics.FrameActivity;
 import com.hypernymbiz.logistics.R;
 import com.hypernymbiz.logistics.api.ApiInterface;
 import com.hypernymbiz.logistics.dialog.SimpleDialog;
+import com.hypernymbiz.logistics.model.ActiveJobResume;
 import com.hypernymbiz.logistics.model.JobDetail;
 import com.hypernymbiz.logistics.model.PayloadNotification;
 import com.hypernymbiz.logistics.model.StartJob;
 import com.hypernymbiz.logistics.model.WebAPIResponse;
 import com.hypernymbiz.logistics.toolbox.ToolbarListener;
+import com.hypernymbiz.logistics.utils.ActiveJobUtils;
 import com.hypernymbiz.logistics.utils.ActivityUtils;
 import com.hypernymbiz.logistics.utils.AppUtils;
 import com.hypernymbiz.logistics.utils.Constants;
@@ -167,6 +169,7 @@ public class JobDetailsFragment extends Fragment implements View.OnClickListener
                     body.put("driver_id", Integer.parseInt(getUserAssociatedEntity));
                     body.put("start_lat_long", driverlocation);
                 }
+
                 ApiInterface.retrofit.startjob(body).enqueue(new Callback<WebAPIResponse<StartJob>>() {
                     @Override
                     public void onResponse(Call<WebAPIResponse<StartJob>> call, Response<WebAPIResponse<StartJob>> response) {
@@ -201,6 +204,12 @@ public class JobDetailsFragment extends Fragment implements View.OnClickListener
                                         snackbar.show();
 
                                     }
+                                    Intent getJobintent = getActivity().getIntent();
+                                    String jobid = getJobintent.getStringExtra("jobid");
+                                    ActiveJobResume activeJobResume=new ActiveJobResume(Double.parseDouble(strlat),Double.parseDouble(strlng),Double.parseDouble(endlat),Double.parseDouble(endlng),Integer.parseInt(getUserAssociatedEntity),jobid,jbstart.getText().toString(),jbend.getText().toString(),actual_start_time);
+
+                                    ActiveJobUtils.saveJobResume(getContext(),activeJobResume);
+                                    ActiveJobUtils.jobResumed(getContext());
                                     // Toast.makeText(fContext, "hhh", Toast.LENGTH_SHORT).show();
                                     Intent intent = new Intent(getContext(), ActiveJobFragment.class);
                                     Intent getintent = getActivity().getIntent();

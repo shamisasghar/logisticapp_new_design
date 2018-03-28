@@ -10,17 +10,28 @@
     <android.support.v7.widget.CardView
         android:id="@+id/cardView"
         android:layout_width="match_parent"
-        android:layout_height="150dp"
+        android:layout_height="250dp"
         app:layout_constraintBottom_toTopOf="@+id/layout_scrollview"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        >
+        app:layout_constraintTop_toTopOf="parent">
 
-        <ImageView
+        <fragment
+            android:id="@+id/mapView"
+            android:name="com.google.android.gms.maps.SupportMapFragment"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent">
+
+        </fragment>
+        <!--<ImageButton-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:id="@+id/img_location"-->
+            <!--android:background="@color/colorPrimaryDark1"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:src="@drawable/ic_mylocation"-->
+            <!--android:layout_gravity="end"/>-->
+
 
     </android.support.v7.widget.CardView>
 
@@ -53,10 +64,11 @@
                     android:orientation="horizontal">
 
                     <TextView
+                        android:id="@+id/txt_speed"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="5dp"
-                        android:text="47"
+                        android:text="0"
                         android:textSize="40sp" />
 
                     <LinearLayout
@@ -77,6 +89,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
                             android:text="moving"
+                            android:id="@+id/txt_truck_status"
                             android:textSize="13sp" />
                     </LinearLayout>
 
@@ -92,11 +105,12 @@
 
                     <ImageView
                         android:layout_width="35dp"
-                        android:layout_height="30dp"
+                        android:layout_height="35dp"
                         android:layout_gravity="center"
-                        android:src="@drawable/ic_launcher_background" />
+                        app:srcCompat="@drawable/ic_launcher_background" />
 
                     <TextView
+                        android:id="@+id/txt_assigned_truck"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -111,7 +125,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/colorPrimary"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:visibility="gone">
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -134,6 +149,7 @@
                             android:orientation="horizontal">
 
                             <TextView
+                                android:id="@+id/txt_distance"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="0.8"
@@ -255,26 +271,30 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_marginLeft="20dp"
-                    android:layout_marginTop="20dp"
-                    android:layout_height="wrap_content">
+                    android:layout_marginTop="20dp">
 
                     <ImageView
                         android:layout_width="0dp"
                         android:layout_height="20dp"
                         android:layout_gravity="center"
                         android:layout_weight="0.1"
-                        android:tint="@color/colorPrimaryDark"
-                        android:src="@drawable/ic_end_point"/>
+                        android:src="@drawable/ic_end_point"
+                        android:tint="@color/colorPrimaryDark" />
+
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.8"
                         android:orientation="vertical">
+
                         <TextView
+                            android:id="@+id/txt_from_address"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="From Address:"/>
+                            android:text="From Address:" />
+
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content">
@@ -282,13 +302,15 @@
                             <TextView
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:text="Assigned Departure Time"
-                                android:layout_weight="0.5"/>
+                                android:layout_weight="0.5"
+                                android:text="Assigned Departure Time" />
+
                             <TextView
+                                android:id="@+id/txt_starttime"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:text="9:00 AM"
-                                android:layout_weight="0.3"/>
+                                android:layout_weight="0.3"
+                                android:text="9:00 AM" />
                         </LinearLayout>
 
                         <LinearLayout
@@ -298,13 +320,15 @@
                             <TextView
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:text="Your Departure Time"
-                                android:layout_weight="0.4"/>
+                                android:layout_weight="0.4"
+                                android:text="Your Departure Time" />
+
                             <TextView
+                                android:id="@+id/txt_actual_starttime"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:text="9:00 AM"
-                                android:layout_weight="0.3"/>
+                                android:layout_weight="0.3"
+                                android:text="9:00 AM" />
                         </LinearLayout>
                     </LinearLayout>
                 </LinearLayout>
@@ -313,30 +337,34 @@
                     android:layout_width="2dp"
                     android:layout_height="50dp"
                     android:layout_marginLeft="38dp"
-                    android:background="@color/colorPrimary">
-                </View>
+                    android:background="@color/colorPrimary"></View>
+
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_marginLeft="20dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginBottom="20dp"
-                    android:layout_height="wrap_content">
+                    android:layout_marginLeft="20dp">
 
                     <ImageView
                         android:layout_width="0dp"
                         android:layout_height="20dp"
                         android:layout_gravity="center"
                         android:layout_weight="0.1"
-                        android:tint="@color/colorPrimary"
-                        android:src="@drawable/ic_end_point"/>
+                        android:src="@drawable/ic_end_point"
+                        android:tint="@color/colorPrimary" />
+
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.8"
                         android:orientation="vertical">
+
                         <TextView
+                            android:id="@+id/txt_to_address"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="To Address:"/>
+                            android:text="To Address:" />
+
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content">
@@ -344,20 +372,22 @@
                             <TextView
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:text="Arrival Time"
-                                android:layout_weight="0.2"/>
+                                android:layout_weight="0.2"
+                                android:text="Arrival Time" />
+
                             <TextView
+                                android:id="@+id/txt_endtime"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:text="9:00 AM"
-                                android:layout_weight="0.3"/>
+                                android:layout_weight="0.3"
+                                android:text="9:00 AM" />
                         </LinearLayout>
                     </LinearLayout>
 
+                </LinearLayout>
+
+
             </LinearLayout>
-
-
-        </LinearLayout>
 
         </LinearLayout>
 
@@ -369,9 +399,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
+
+
         android:gravity="center"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -381,22 +410,22 @@
         app:layout_constraintTop_toBottomOf="@+id/layout_scrollview">
 
         <Button
+            android:id="@+id/btn_complete"
             android:layout_width="120dp"
             android:layout_height="45dp"
             android:layout_margin="10dp"
-            android:id="@+id/btn_dialog_complete"
             android:background="@drawable/border_orange"
             android:text="COMPLETE"
             android:textColor="#ffffff" />
 
         <Button
+            android:id="@+id/btn_cancel"
             android:layout_width="121dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_margin="10dp"
             android:background="@drawable/border_black"
             android:text="CANCEL"
-            android:id="@+id/btn_dialog_cancel"
             android:textColor="@color/colorPrimary" />
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>

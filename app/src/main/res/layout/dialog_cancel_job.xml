@@ -61,11 +61,13 @@ android:background="#ffffff"
                 android:layout_width="100dp"
                 android:layout_height="80dp"
                 android:tint="@color/colorPrimary"
+                android:id="@+id/img_ok"
                 android:src="@drawable/ic_check" />
             <ImageView
                 android:layout_width="100dp"
                 android:layout_height="80dp"
                 android:tint="@color/colorPrimary"
+                android:id="@+id/img_cancel"
                 android:src="@drawable/ic_cancel"
                 />
 

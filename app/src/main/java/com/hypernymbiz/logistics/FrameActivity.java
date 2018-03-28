@@ -11,6 +11,7 @@ import android.view.MenuItem;
 
 import com.hypernymbiz.logistics.dialog.SimpleDialog;
 import com.hypernymbiz.logistics.enumerations.AnimationEnum;
+import com.hypernymbiz.logistics.fragments.ActiveJobFragment;
 import com.hypernymbiz.logistics.fragments.HomeFragment;
 import com.hypernymbiz.logistics.toolbox.ToolbarListener;
 import com.hypernymbiz.logistics.utils.ActivityUtils;
@@ -71,13 +72,21 @@ public class FrameActivity extends AppCompatActivity implements ToolbarListener 
 
     @Override
     public void onBackPressed() {
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.container);
 
         if (isTaskRoot()) {
             ActivityUtils.startHomeActivity(this, HomeActivity.class, HomeFragment.class.getName());
+
         }
-        else {
+        else{
+                FrameActivity.this.finish();
+                overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+            }
+        if (fragment instanceof ActiveJobFragment)
+        {
             FrameActivity.this.finish();
             overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+
         }
 
     }

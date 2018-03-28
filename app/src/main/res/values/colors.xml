@@ -7,7 +7,7 @@
     <color name="colorMain">#c82209</color>
     <color name="colorAccent2">#FB360D</color>
     <color name="colorwhite">#ffffff</color>
-
+    <color name="colorPrimaryDark1">#0ec9c9c9</color> <!-- Toolbar Color -->
     <color name="colorwhite2">#a8ffffff</color>
     <!--App Background-->
     <color name="colorAppBG">#e6e6e6</color>
