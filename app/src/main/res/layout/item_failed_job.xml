@@ -17,7 +17,9 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="JOB 06"/>
+                android:text="JOB"
+                android:textColor="@color/colorAccent"
+                android:id="@+id/txt_job_name"/>
             <View
                 android:layout_width="5dp"
                 android:layout_marginLeft="3dp"
@@ -30,7 +32,8 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Failed"/>
+                android:text="Failed"
+                android:id="@+id/txt_job_status"/>
         </LinearLayout>
         <LinearLayout
             android:layout_width="wrap_content"
@@ -39,10 +42,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Start time:"
+                android:textColor="@color/colorAccent"
                 android:layout_marginRight="5dp"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:id="@+id/txt_job_starttime"
                 android:text="feburary 27,2018 11:30 am"/>
 
         </LinearLayout>
@@ -53,10 +58,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="End time:"
+                android:textColor="@color/colorAccent"
                 android:layout_marginRight="10dp"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:id="@+id/txt_job_endtime"
                 android:text="feburary 27,2018 11:30 am"/>
 
         </LinearLayout>

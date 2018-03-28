@@ -6,6 +6,7 @@ import com.hypernymbiz.logistics.model.JobInfo;
 import com.hypernymbiz.logistics.model.Maintenance;
 import com.hypernymbiz.logistics.model.MaintenanceUpdate;
 import com.hypernymbiz.logistics.model.Profile;
+import com.hypernymbiz.logistics.model.Respone_Completed_job;
 import com.hypernymbiz.logistics.model.StartJob;
 import com.hypernymbiz.logistics.model.User;
 import com.hypernymbiz.logistics.model.WebAPIResponse;
@@ -69,6 +70,10 @@ public interface ApiInterface {
 
     @PUT("iof/maintenance_update")
     Call<WebAPIResponse<MaintenanceUpdate>> maintenanceupdate(@Body HashMap<String, Object> body);
+
+    @GET("iof/get_app_jobs/")
+    Call<WebAPIResponse<Respone_Completed_job>> getalldata(@Query("driver_id") int driver_id, @Query("status_id") int status_id);
+
 
     class MyOkHttpClient {
 

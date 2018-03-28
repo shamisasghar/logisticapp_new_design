@@ -26,6 +26,9 @@
     <string name="arrival_time">To address\nArrival time:    </string>
     <string name="err_msg_name">Enter a valid email (e.g. name@mail.com)</string>
     <string name="err_msg_password">Enter the password</string>
+    <string name="title_location">Location Not Available</string>
+    <string name="msg_location">Please enable your location from settings</string>
+
 
 
 

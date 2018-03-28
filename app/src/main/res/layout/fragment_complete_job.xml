@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:id="@+id/coordinator"
-    android:layout_height="match_parent"
-    android:background="@drawable/ic_small_map">
+    android:layout_height="match_parent">
+    <include layout="@layout/map_content_main"/>
     <include layout="@layout/bottomsheet_complete_job"/>
 </android.support.design.widget.CoordinatorLayout>

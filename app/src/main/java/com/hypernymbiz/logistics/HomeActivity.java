@@ -1,5 +1,7 @@
 package com.hypernymbiz.logistics;
 
+import android.content.Context;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -52,6 +54,8 @@ public class HomeActivity extends AppCompatActivity implements ToolbarListener,O
         } else {
             addFragment(new HomeFragment());
         }
+
+        Locationcheck();
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -297,4 +301,32 @@ public class HomeActivity extends AppCompatActivity implements ToolbarListener,O
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
+    public void Locationcheck() {
+        final LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+
+        if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            mSimpleDialog = new SimpleDialog(this, getString(R.string.title_location), getString(R.string.msg_location),
+                    getString(R.string.button_cancel), getString(R.string.button_ok), new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    switch (v.getId()) {
+                        case R.id.button_positive:
+                            mSimpleDialog.dismiss();
+                            ActivityUtils.startWifiSettings(HomeActivity.this);
+                            break;
+                        case R.id.button_negative:
+                            mSimpleDialog.dismiss();
+                            break;
+                    }
+                }
+            });
+            mSimpleDialog.show();
+            return;
+        }
+    }
+
+
+
+
 }
