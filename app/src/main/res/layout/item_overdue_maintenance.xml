@@ -17,7 +17,8 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="MAINTENANCE 06"/>
+                android:id="@+id/txt_maintenance_name"
+                android:text="MAINTENANCE"/>
             <View
                 android:layout_width="5dp"
                 android:layout_height="1dp"
@@ -29,7 +30,8 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="OVERDUE"/>
+                android:text="Overdue"
+                android:id="@+id/txt_maintenance_status"/>
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
@@ -38,6 +40,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:id="@+id/txt_assigned_truck"
                 android:text="Truckname 06"/>
             <View
                 android:layout_width="5dp"
@@ -50,6 +53,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:id="@+id/txt_maintenance_type"
                 android:text="Oil Change"/>
         </LinearLayout>
         <LinearLayout
@@ -64,6 +68,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
+                android:id="@+id/txt_maintenance_date"
                 android:text="6 March, 2018"/>
             <TextView
                 android:layout_width="wrap_content"
@@ -75,7 +80,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="end"
-                android:text="9:56 AM" />
+                android:text="9:56 AM"
+                android:layout_marginLeft="5dp"
+                android:id="@+id/txt_maintenance_time"/>
         </LinearLayout>
 
 

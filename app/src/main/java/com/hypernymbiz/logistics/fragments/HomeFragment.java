@@ -126,9 +126,6 @@ public class HomeFragment extends Fragment  implements View.OnClickListener, OnM
 //            EventBus.getDefault().register(this);
     }
 
-    void setJobResume(){
-
-    }
 
     @Override
     public void onAttach(Context context) {
@@ -408,7 +405,7 @@ public class HomeFragment extends Fragment  implements View.OnClickListener, OnM
                 googleMap.animateCamera(update);
                 chk =false;
             }
-            option = new MarkerOptions().title("location").position(new LatLng(ll.latitude, ll.longitude));
+            option = new MarkerOptions().title("location").icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_location)).position(new LatLng(ll.latitude, ll.longitude));
             marker = googleMap.addMarker(option);
 //            Toast.makeText(getActivity(), "location has been get"+Double.toString(ll.latitude), Toast.LENGTH_SHORT).show();
             if (ActiveJobUtils.isJobResumed(getContext())){

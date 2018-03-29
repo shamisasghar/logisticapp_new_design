@@ -5,6 +5,7 @@ import com.hypernymbiz.logistics.model.JobDetail;
 import com.hypernymbiz.logistics.model.JobEnd;
 import com.hypernymbiz.logistics.model.JobInfo;
 import com.hypernymbiz.logistics.model.Maintenance;
+import com.hypernymbiz.logistics.model.MaintenanceOverdue;
 import com.hypernymbiz.logistics.model.MaintenanceUpdate;
 import com.hypernymbiz.logistics.model.Profile;
 import com.hypernymbiz.logistics.model.Respone_Completed_job;
@@ -41,6 +42,7 @@ import retrofit2.http.Query;
 public interface ApiInterface {
 
     String HTTP = "http://159.65.7.152/";
+//    String HTTP = "http://192.168.2.120:8000/";
     Retrofit.Builder builder = new Retrofit.Builder()
             .baseUrl(ApiInterface.HTTP)
             .addConverterFactory(GsonConverterFactory.create())
@@ -77,6 +79,11 @@ public interface ApiInterface {
 
     @PUT("iof/driver_job_update")
     Call<WebAPIResponse<JobEnd>> endjob(@Body HashMap<String, Object> body);
+
+    @GET("iof/get_app_maintenances/")
+
+    Call<WebAPIResponse<List<MaintenanceOverdue>>> getallmaintenanceoverdue(@Query("driver_id") int driver_id, @Query("s_id")int status_id);
+
 
 
     class MyOkHttpClient {

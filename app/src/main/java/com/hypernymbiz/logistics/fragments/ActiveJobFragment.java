@@ -48,10 +48,12 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.hypernymbiz.logistics.FrameActivity;
 import com.hypernymbiz.logistics.R;
 import com.hypernymbiz.logistics.api.ApiInterface;
 import com.hypernymbiz.logistics.model.DirectionsJSONParser;
 import com.hypernymbiz.logistics.model.JobEnd;
+import com.hypernymbiz.logistics.model.StartJob;
 import com.hypernymbiz.logistics.model.WebAPIResponse;
 import com.hypernymbiz.logistics.toolbox.ToolbarListener;
 import com.hypernymbiz.logistics.utils.ActiveJobUtils;
@@ -108,7 +110,7 @@ public class ActiveJobFragment extends Fragment implements View.OnClickListener,
     LocationRequest locationRequest;
     Marker marker;
     Boolean check = true;
-    ImageView btn_dialog_okk, btn_dialog_cls;
+    ImageView btn_dialog_okk, btn_dialog_cls, btn_dialog_fail_ok, btn_dialog_fail_cls;
     TextView truckspeed, truckstatus;
 
     View view;
@@ -161,37 +163,13 @@ public class ActiveJobFragment extends Fragment implements View.OnClickListener,
         btn_completejob.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ActiveJobUtils.clearJobResumed(getContext());
-                String id;
-                id = pref.getString("jobid", "");
-//        Toast.makeText(context, id, Toast.LENGTH_SHORT).show();
-                HashMap<String, Object> body = new HashMap<>();
-                body.put("job_id", id);
-                body.put("driver_id", Integer.parseInt(getUserAssociatedEntity));
-                body.put("actual_end_time", actual_end_time);
-                body.put("end_lat_long", driverlocation);
 
-                ApiInterface.retrofit.endjob(body).enqueue(new Callback<WebAPIResponse<JobEnd>>() {
-                    @Override
-                    public void onResponse(Call<WebAPIResponse<JobEnd>> call, Response<WebAPIResponse<JobEnd>> response) {
-                        if (response.isSuccessful()) {
-
-                            if (response.body().status) {
-
-                            }
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<WebAPIResponse<JobEnd>> call, Throwable t) {
-
-                    }
-                });
 
                 complete = new Dialog(getContext());
                 complete.setContentView(R.layout.dialog_complete_job);
                 btn_dialog_okk = (ImageView) complete.findViewById(R.id.img_ok);
                 btn_dialog_cls = (ImageView) complete.findViewById(R.id.img_cancel);
+
                 complete.setCanceledOnTouchOutside(false);
                 complete.show();
                 complete.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -200,7 +178,33 @@ public class ActiveJobFragment extends Fragment implements View.OnClickListener,
                     @Override
                     public void onClick(View v) {
                         complete.hide();
-//
+                        ActiveJobUtils.clearJobResumed(getContext());
+                        String id;
+                        id = pref.getString("jobid", "");
+//        Toast.makeText(context, id, Toast.LENGTH_SHORT).show();
+                        HashMap<String, Object> body = new HashMap<>();
+                        body.put("job_id", id);
+                        body.put("driver_id", Integer.parseInt(getUserAssociatedEntity));
+                        body.put("actual_end_time", actual_end_time);
+                        body.put("end_lat_long", driverlocation);
+
+                        ApiInterface.retrofit.endjob(body).enqueue(new Callback<WebAPIResponse<JobEnd>>() {
+                            @Override
+                            public void onResponse(Call<WebAPIResponse<JobEnd>> call, Response<WebAPIResponse<JobEnd>> response) {
+                                if (response.isSuccessful()) {
+
+                                    if (response.body().status) {
+
+                                    }
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<WebAPIResponse<JobEnd>> call, Throwable t) {
+
+                            }
+                        });
+
 //                        ActivityUtils.startActivity(getActivity(), FrameActivity.class, JobNotificationFragment.class.getName(), null);
                         getActivity().onBackPressed();
                         getActivity().finish();
@@ -225,9 +229,56 @@ public class ActiveJobFragment extends Fragment implements View.OnClickListener,
 
                 cancl = new Dialog(getContext());
                 cancl.setContentView(R.layout.dialog_cancel_job);
+                btn_dialog_fail_ok = (ImageView) cancl.findViewById(R.id.img_failed_ok);
+                btn_dialog_fail_cls = (ImageView) cancl.findViewById(R.id.img_failed_cancel);
                 cancl.setCanceledOnTouchOutside(false);
                 cancl.show();
                 cancl.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+                btn_dialog_fail_ok.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        cancl.hide();
+                        String id = pref.getString("jobid", "");
+
+                        HashMap<String, Object> body = new HashMap<>();
+                        if (id != null) {
+                            body.put("job_id", Integer.parseInt(id));
+                            body.put("driver_id", Integer.parseInt(getUserAssociatedEntity));
+                            body.put("flag", 54);
+                        }
+                        ApiInterface.retrofit.canceljob(body).enqueue(new Callback<WebAPIResponse<StartJob>>() {
+                            @Override
+                            public void onResponse(Call<WebAPIResponse<StartJob>> call, Response<WebAPIResponse<StartJob>> response) {
+                                if (response.isSuccessful()) {
+                                    if (response.body().status) {
+
+                                    }
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<WebAPIResponse<StartJob>> call, Throwable t) {
+//
+
+                            }
+                        });
+                        getActivity().onBackPressed();
+                        getActivity().finish();
+                        ActiveJobUtils.clearJobResumed(getContext());
+
+
+                    }
+                });
+
+                btn_dialog_fail_cls.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        cancl.hide();
+                    }
+                });
+
+
 
             }
         });

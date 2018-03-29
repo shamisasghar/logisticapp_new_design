@@ -272,13 +272,13 @@ public class JobDetailsFragment extends Fragment implements View.OnClickListener
                     body.put("job_id", Integer.parseInt(id));
                     body.put("driver_id", Integer.parseInt(getUserAssociatedEntity));
                     body.put("flag", 54);
-                    body.put("start_lat_long", ll);
+                    body.put("start_lat_long", driverlocation);
 
                 } else {
                     body.put("job_id", payloadNotification.job_id);
                     body.put("driver_id", Integer.parseInt(getUserAssociatedEntity));
                     body.put("flag", 54);
-                    body.put("start_lat_long", ll);
+                    body.put("start_lat_long", driverlocation);
                 }
 
 
