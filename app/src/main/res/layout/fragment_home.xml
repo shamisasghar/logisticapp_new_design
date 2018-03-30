@@ -14,31 +14,29 @@
             android:id="@+id/mapView"
             android:name="com.google.android.gms.maps.SupportMapFragment"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-        </fragment>
+            android:layout_height="match_parent"></fragment>
         <!--<RelativeLayout-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content">-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content">-->
 
-            <!--<EditText-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:id="@+id/edit_search"-->
-                <!--android:editable="false"-->
-                <!--android:imeOptions="actionSearch"/>-->
+        <!--<EditText-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:id="@+id/edit_search"-->
+        <!--android:editable="false"-->
+        <!--android:imeOptions="actionSearch"/>-->
 
 
         <!--</RelativeLayout>-->
 
         <!--<ImageButton-->
-            <!--android:id="@+id/btn_speak"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_gravity="center"-->
-            <!--android:layout_alignParentEnd="true"-->
-            <!--android:layout_alignParentTop="true"-->
-            <!--android:src="@drawable/ic_warning_black_24dp" />-->
+        <!--android:id="@+id/btn_speak"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_gravity="center"-->
+        <!--android:layout_alignParentEnd="true"-->
+        <!--android:layout_alignParentTop="true"-->
+        <!--android:src="@drawable/ic_warning_black_24dp" />-->
 
 
         <!--<Button-->
@@ -122,130 +120,242 @@
                 </LinearLayout>
             </LinearLayout>
 
-<!-- pending job-->
+            <!-- pending job-->
             <LinearLayout
+                android:id="@+id/layout_linear_inprogress"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="13dp"
                 android:layout_marginRight="13dp"
                 android:layout_marginTop="5dp"
-                android:id="@+id/layout_linear_inprogress"
                 android:background="@color/colorPrimary">
 
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
+                    android:visibility="gone"
                     android:layout_marginLeft="10dp">
 
-                    <ImageView
+                    <fragment
+                        android:id="@+id/mapView1"
+                        android:name="com.google.android.gms.maps.SupportMapFragment"
                         android:layout_width="100dp"
-                        android:layout_height="100dp"
-                        android:layout_gravity="center"
-                        android:src="@drawable/ic_small_map" />
+                        android:layout_height="100dp">
+
+                    </fragment>
                 </LinearLayout>
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="5dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_marginTop="5dp"
-                    android:orientation="vertical">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp">
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="0.5"
-                            android:text="JOB 07"
-                            android:textColor="#ffffff" />
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="INPROGRESS"
-                            android:textColor="#ffffff" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
+                        android:layout_marginBottom="5dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginTop="5dp"
                         android:orientation="vertical">
 
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="horizontal">
-
-                            <ImageView
-                                android:layout_width="5dp"
-                                android:layout_height="30dp"
-                                android:layout_gravity="center"
-                                android:layout_weight="0.1"
-                                android:src="@drawable/ic_end_point" />
+                            android:layout_marginLeft="10dp">
 
                             <TextView
-                                android:layout_width="wrap_content"
+                                android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:layout_marginLeft="5dp"
-                                android:text="@string/departure_time"
+                                android:layout_weight="0.5"
+                                android:gravity="center"
+                                android:id="@+id/txt_job_name"
+                                android:text="JOB"
                                 android:textColor="#ffffff" />
 
                             <TextView
-                                android:layout_width="wrap_content"
+                                android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:layout_gravity="bottom"
-                                android:layout_weight="1"
-                                android:text="9:00AM"
+                                android:layout_weight="0.7"
+                                android:text="INPROGRESS"
                                 android:textColor="#ffffff" />
-
                         </LinearLayout>
-
-                        <View
-                            android:layout_width="1dp"
-                            android:layout_height="40dp"
-                            android:layout_marginLeft="4dp"
-                            android:background="#ffffff"></View>
 
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="horizontal">
+                            android:layout_marginLeft="10dp"
+                            android:orientation="vertical">
 
-                            <ImageView
-                                android:layout_width="5dp"
-                                android:layout_height="30dp"
-                                android:layout_gravity="center"
-                                android:layout_weight="0.1"
-                                android:src="@drawable/ic_end_point">
-
-                            </ImageView>
-
-                            <TextView
-                                android:layout_width="wrap_content"
+                            <LinearLayout
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="5dp"
-                                android:text="@string/arrival_time"
-                                android:textColor="#ffffff" />
+                                android:layout_marginTop="5dp">
 
-                            <TextView
-                                android:layout_width="wrap_content"
+                                <ImageView
+                                    android:layout_width="0dp"
+                                    android:layout_height="20dp"
+                                    android:layout_gravity="center"
+                                    android:layout_weight="0.1"
+                                    android:src="@drawable/ic_end_point" />
+
+                                <LinearLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="5dp"
+                                    android:layout_weight="0.8"
+                                    android:orientation="vertical">
+
+                                    <TextView
+                                        android:id="@+id/txt_from_address"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="From Address:" />
+
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content">
+
+                                        <TextView
+                                            android:layout_width="0dp"
+                                            android:layout_height="wrap_content"
+                                            android:layout_weight="0.5"
+                                            android:text="Depart Time" />
+
+                                        <TextView
+                                            android:id="@+id/txt_starttime"
+                                            android:layout_width="0dp"
+                                            android:layout_height="wrap_content"
+                                            android:layout_weight="1"
+                                            android:layout_marginLeft="5dp"
+                                            android:text="9:00 AM" />
+                                    </LinearLayout>
+                                </LinearLayout>
+                            </LinearLayout>
+
+                            <View
+                                android:layout_width="2dp"
+                                android:layout_height="50dp"
+                                android:layout_marginLeft="20dp"
+                                android:background="@color/colorwhite2">
+
+                            </View>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_gravity="bottom"
-                                android:layout_marginLeft="10dp"
-                                android:layout_weight="1"
-                                android:text="7:30AM"
-                                android:textColor="#ffffff" />
+                                android:layout_marginLeft="5dp">
+
+                                <ImageView
+                                    android:layout_width="0dp"
+                                    android:layout_height="20dp"
+                                    android:layout_gravity="center"
+                                    android:layout_weight="0.1"
+                                    android:src="@drawable/ic_end_point" />
+
+                                <LinearLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="0.8"
+                                    android:orientation="vertical">
+
+                                    <TextView
+                                        android:id="@+id/txt_to_address"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="To Address:" />
+
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content">
+
+                                        <TextView
+                                            android:layout_width="0dp"
+                                            android:layout_height="wrap_content"
+                                            android:layout_weight="0.4"
+                                            android:text="Arrival Time" />
+
+                                        <TextView
+                                            android:id="@+id/txt_endtime"
+                                            android:layout_width="0dp"
+                                            android:layout_height="wrap_content"
+                                            android:layout_weight="1"
+                                            android:layout_marginLeft="5dp"
+                                            android:text="9:00 AM" />
+                                    </LinearLayout>
+                                </LinearLayout>
+                            </LinearLayout>
+
+
+                            <!--<LinearLayout-->
+                            <!--android:layout_width="match_parent"-->
+                            <!--android:layout_height="wrap_content"-->
+                            <!--android:orientation="horizontal">-->
+
+                            <!--<ImageView-->
+                            <!--android:layout_width="5dp"-->
+                            <!--android:layout_height="30dp"-->
+                            <!--android:layout_gravity="center"-->
+                            <!--android:layout_weight="0.1"-->
+                            <!--android:src="@drawable/ic_end_point" />-->
+
+                            <!--<TextView-->
+                            <!--android:layout_width="wrap_content"-->
+                            <!--android:layout_height="wrap_content"-->
+                            <!--android:layout_marginLeft="5dp"-->
+                            <!--android:text="@string/departure_time"-->
+                            <!--android:textColor="#ffffff" />-->
+
+                            <!--<TextView-->
+                            <!--android:layout_width="wrap_content"-->
+                            <!--android:layout_height="wrap_content"-->
+                            <!--android:layout_gravity="bottom"-->
+                            <!--android:layout_weight="1"-->
+                            <!--android:text="9:00AM"-->
+                            <!--android:textColor="#ffffff" />-->
+
+                            <!--</LinearLayout>-->
+
+                            <!--<View-->
+                            <!--android:layout_width="1dp"-->
+                            <!--android:layout_height="40dp"-->
+                            <!--android:layout_marginLeft="4dp"-->
+                            <!--android:background="#ffffff">-->
+                            <!---->
+                            <!--</View>-->
+
+                            <!--<LinearLayout-->
+                            <!--android:layout_width="match_parent"-->
+                            <!--android:layout_height="wrap_content"-->
+                            <!--android:orientation="horizontal">-->
+
+                            <!--<ImageView-->
+                            <!--android:layout_width="5dp"-->
+                            <!--android:layout_height="30dp"-->
+                            <!--android:layout_gravity="center"-->
+                            <!--android:layout_weight="0.1"-->
+                            <!--android:src="@drawable/ic_end_point">-->
+
+                            <!--</ImageView>-->
+
+                            <!--<TextView-->
+                            <!--android:layout_width="wrap_content"-->
+                            <!--android:layout_height="wrap_content"-->
+                            <!--android:layout_marginLeft="5dp"-->
+                            <!--android:text="@string/arrival_time"-->
+                            <!--android:textColor="#ffffff" />-->
+
+                            <!--<TextView-->
+                            <!--android:layout_width="wrap_content"-->
+                            <!--android:layout_height="wrap_content"-->
+                            <!--android:layout_gravity="bottom"-->
+                            <!--android:layout_marginLeft="10dp"-->
+                            <!--android:layout_weight="1"-->
+                            <!--android:text="7:30AM"-->
+                            <!--android:textColor="#ffffff" />-->
+                            <!--</LinearLayout>-->
+                            <!---->
+
                         </LinearLayout>
                     </LinearLayout>
-                </LinearLayout>
+
             </LinearLayout>
 
             <LinearLayout
@@ -256,10 +366,10 @@
                 android:orientation="horizontal">
 
                 <LinearLayout
+                    android:id="@+id/layout_linear_job"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:id="@+id/layout_linear_job"
                     android:orientation="vertical">
 
                     <LinearLayout
@@ -283,10 +393,10 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/layout_linear_maintenance"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1.5"
-                    android:id="@+id/layout_linear_maintenance"
                     android:orientation="vertical">
 
                     <LinearLayout
@@ -310,10 +420,10 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/layout_linear_violation"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1.2"
-                    android:id="@+id/layout_linear_violation"
                     android:orientation="vertical">
 
                     <LinearLayout
@@ -340,93 +450,90 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="14dp"
-                android:layout_marginTop="14dp"
-                android:layout_marginRight="14dp">
+                android:layout_marginRight="14dp"
+                android:layout_marginTop="14dp">
 
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="100dp"
-                    android:layout_weight="1"
                     android:layout_marginBottom="15dp"
                     android:layout_marginRight="10dp"
+                    android:layout_weight="1"
                     android:background="@color/colorPrimary">
+
                     <ImageView
                         android:layout_width="50dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_marginLeft="5dp"
-                        android:src="@drawable/ic_graph"/>
+                        android:src="@drawable/ic_graph" />
+
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical"
+                        android:layout_gravity="center"
                         android:layout_marginLeft="10dp"
-                        android:layout_gravity="center">
+                        android:orientation="vertical">
+
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Avg.Mileage"
                             android:textColor="#ffffff"
-                            android:textSize="15sp"/>
+                            android:textSize="15sp" />
+
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:text="7.34 KM/L"
                             android:textColor="#ffffff"
-                            android:textSize="19sp"
-                            android:text="7.34 KM/L"/>
+                            android:textSize="19sp" />
 
                     </LinearLayout>
 
 
-
-
                 </LinearLayout>
+
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="100dp"
-                    android:background="@color/colorPrimary"
-                    android:layout_weight="1">
+                    android:layout_weight="1"
+                    android:background="@color/colorPrimary">
+
                     <ImageView
                         android:layout_width="50dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_marginLeft="5dp"
-                        android:src="@drawable/ic_compass"/>
+                        android:src="@drawable/ic_compass" />
+
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical"
+                        android:layout_gravity="center"
                         android:layout_marginLeft="10dp"
-                        android:layout_gravity="center">
+                        android:orientation="vertical">
+
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Last Job"
                             android:textColor="#ffffff"
-                            android:textSize="15sp"/>
+                            android:textSize="15sp" />
+
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:text="JOB 7"
                             android:textColor="#ffffff"
-                            android:textSize="25sp"
-                            android:text="JOB 7"/>
+                            android:textSize="25sp" />
 
                     </LinearLayout>
 
                 </LinearLayout>
 
 
-
-
-
-
-
             </LinearLayout>
-
-
-
-
-
 
 
         </LinearLayout>

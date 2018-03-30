@@ -97,6 +97,7 @@ public class HomeFragment extends Fragment  implements View.OnClickListener, OnM
     EditText editText;
     ImageButton img;
     String size;
+    TextView fromaddress_inprogress,toaddress_inprogress,starttime_inprogress,endtime_inprogress,jobname_inprogress;
 
     Location location;
     LatLng ll;
@@ -161,6 +162,13 @@ public class HomeFragment extends Fragment  implements View.OnClickListener, OnM
         linear_violation = (LinearLayout) view.findViewById(R.id.layout_linear_violation);
         linear_inprogress = (LinearLayout) view.findViewById(R.id.layout_linear_inprogress);
 
+        fromaddress_inprogress=(TextView)view.findViewById(R.id.txt_from_address);
+        toaddress_inprogress=(TextView)view.findViewById(R.id.txt_to_address);
+        starttime_inprogress=(TextView)view.findViewById(R.id.txt_starttime);
+        endtime_inprogress=(TextView)view.findViewById(R.id.txt_endtime);
+        jobname_inprogress=(TextView)view.findViewById(R.id.txt_job_name);
+
+
         if (!ActiveJobUtils.isJobResumed(getContext())){
             linear_inprogress.setVisibility(View.GONE);
             mapcardalayout.setMinimumHeight(300);
@@ -170,6 +178,16 @@ public class HomeFragment extends Fragment  implements View.OnClickListener, OnM
             ActiveJobResume activeJobResume=ActiveJobUtils.getJobResume(getContext());
             String startAddress = AppUtils.getAddress(activeJobResume.getSlat(), activeJobResume.getSlong(), getContext());
             String endAddress = AppUtils.getAddress(activeJobResume.getElat(), activeJobResume.getElong(), getContext());
+            String departtime=activeJobResume.getStart_time();
+            String arrivaltime=activeJobResume.getEnd_time();
+            String jobname=activeJobResume.getJobname();
+
+            fromaddress_inprogress.setText(startAddress);
+            toaddress_inprogress.setText(endAddress);
+            starttime_inprogress.setText(departtime);
+            endtime_inprogress.setText(arrivaltime);
+            jobname_inprogress.setText(jobname);
+
 
         }
 
@@ -238,6 +256,15 @@ public class HomeFragment extends Fragment  implements View.OnClickListener, OnM
             ActiveJobResume activeJobResume=ActiveJobUtils.getJobResume(getContext());
             String startAddress = AppUtils.getAddress(activeJobResume.getSlat(), activeJobResume.getSlong(), getContext());
             String endAddress = AppUtils.getAddress(activeJobResume.getElat(), activeJobResume.getElong(), getContext());
+            String departtime=activeJobResume.getStart_time();
+            String arrivaltime=activeJobResume.getEnd_time();
+            String jobname=activeJobResume.getJobname();
+
+            fromaddress_inprogress.setText(startAddress);
+            toaddress_inprogress.setText(endAddress);
+            starttime_inprogress.setText(departtime);
+            endtime_inprogress.setText(arrivaltime);
+            jobname_inprogress.setText(jobname);
         }
         if (mContext instanceof ToolbarListener) {
             ((ToolbarListener) mContext).setTitle("Dashboard");
@@ -394,9 +421,12 @@ public class HomeFragment extends Fragment  implements View.OnClickListener, OnM
 //            }
 //        });
         if (ActiveJobUtils.isJobResumed(getContext())){
-            MarkerOptions sss;
-            sss = new MarkerOptions().title("destination Address").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)).position(new LatLng(ActiveJobUtils.getJobResume(getContext()).getElat(), ActiveJobUtils.getJobResume(getContext()).getElong()));
-            marker3 = googleMap.addMarker(sss);
+            MarkerOptions destinationaddress,startaddress;
+            destinationaddress = new MarkerOptions().title("destination Address").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)).position(new LatLng(ActiveJobUtils.getJobResume(getContext()).getElat(), ActiveJobUtils.getJobResume(getContext()).getElong()));
+            googleMap.addMarker(destinationaddress);
+            startaddress = new MarkerOptions().title("start Address").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)).position(new LatLng(ActiveJobUtils.getJobResume(getContext()).getSlat(), ActiveJobUtils.getJobResume(getContext()).getSlong()));
+            googleMap.addMarker(startaddress);
+
         }
 
         if (ll!=null) {
@@ -412,7 +442,7 @@ public class HomeFragment extends Fragment  implements View.OnClickListener, OnM
                 ActiveJobResume activeJobResume=ActiveJobUtils.getJobResume(getContext());
 
 //                String url = getDirectionsUrl(new LatLng(activeJobResume.getSlat(),activeJobResume.getSlong()), new LatLng(activeJobResume.getElat(),activeJobResume.getElong()));
-                String url = getDirectionsUrl(ll, new LatLng(activeJobResume.getElat(),activeJobResume.getElong()));
+                String url = getDirectionsUrl(new LatLng(activeJobResume.getSlat(),activeJobResume.getSlong()), new LatLng(activeJobResume.getElat(),activeJobResume.getElong()));
                 FetchUrl FetchUrl = new FetchUrl();
                 FetchUrl.execute(url);
             }
@@ -454,6 +484,7 @@ public class HomeFragment extends Fragment  implements View.OnClickListener, OnM
 //        Toast.makeText(getActivity(), "location changed"+Double.toString(ll.latitude), Toast.LENGTH_SHORT).show();
 
         supportMapFragment.getMapAsync(this);
+
 
 
     }

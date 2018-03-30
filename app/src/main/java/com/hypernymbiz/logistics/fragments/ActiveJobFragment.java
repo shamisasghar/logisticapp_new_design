@@ -28,6 +28,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.github.capur16.digitspeedviewlib.DigitSpeedView;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationCallback;
@@ -57,6 +58,7 @@ import com.hypernymbiz.logistics.model.StartJob;
 import com.hypernymbiz.logistics.model.WebAPIResponse;
 import com.hypernymbiz.logistics.toolbox.ToolbarListener;
 import com.hypernymbiz.logistics.utils.ActiveJobUtils;
+import com.hypernymbiz.logistics.utils.AppUtils;
 import com.hypernymbiz.logistics.utils.LoginUtils;
 
 import org.json.JSONObject;
@@ -105,13 +107,13 @@ public class ActiveJobFragment extends Fragment implements View.OnClickListener,
     public static int counter = 0;
     String driverlocation;
     LatLng ll;
-
+    DigitSpeedView digitSpeedView;
     SupportMapFragment supportMapFragment;
     LocationRequest locationRequest;
     Marker marker;
     Boolean check = true;
     ImageView btn_dialog_okk, btn_dialog_cls, btn_dialog_fail_ok, btn_dialog_fail_cls;
-    TextView truckspeed, truckstatus;
+    TextView truckspeed, truckstatus,jobStarttime,yourstarttime,jobendtime,jobfromaddress,jobendaddress;
 
     View view;
     Calendar c;
@@ -139,7 +141,13 @@ public class ActiveJobFragment extends Fragment implements View.OnClickListener,
         btn_completejob = (Button) view.findViewById(R.id.btn_complete);
         btn_failedjob = (Button) view.findViewById(R.id.btn_cancel);
         truckspeed = (TextView) view.findViewById(R.id.txt_speed);
+        digitSpeedView = (DigitSpeedView) view.findViewById(R.id.digitspeed1);
         truckstatus = (TextView) view.findViewById(R.id.txt_truck_status);
+       jobStarttime = (TextView) view.findViewById(R.id.txt_starttime);
+       jobendtime = (TextView) view.findViewById(R.id.txt_endtime);
+        yourstarttime = (TextView) view.findViewById(R.id.txt_actual_starttime);
+        jobfromaddress = (TextView) view.findViewById(R.id.txt_from_address);
+        jobendaddress = (TextView) view.findViewById(R.id.txt_to_address);
 
         pref = getActivity().getSharedPreferences("TAG", MODE_PRIVATE);
         supportMapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.mapView);
@@ -158,6 +166,17 @@ public class ActiveJobFragment extends Fragment implements View.OnClickListener,
         SimpleDateFormat outputFmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         outputFmt.setTimeZone(TimeZone.getTimeZone("gmt"));
         actual_end_time = outputFmt.format(new Date());
+
+        String starttime,endtime,actualstarttime;
+
+       starttime= pref.getString("Startjob", "");
+        endtime=pref.getString("Startend", "");
+        actualstarttime=pref.getString("drivertime", "");
+
+        jobStarttime.setText(starttime.toString());
+        jobendtime.setText(endtime.toString());
+        yourstarttime.setText(actualstarttime);
+
 
 
         btn_completejob.setOnClickListener(new View.OnClickListener() {
@@ -279,7 +298,6 @@ public class ActiveJobFragment extends Fragment implements View.OnClickListener,
                 });
 
 
-
             }
         });
 
@@ -351,7 +369,26 @@ public class ActiveJobFragment extends Fragment implements View.OnClickListener,
         lng = location.getLongitude();
         driverlocation = lat.toString() + "," + lng.toString();
 
+        int currentspeed = (int) ((location.getSpeed() * 3600) / 1000);
+
+        if(location==null)
+        {
+
+            truckspeed.setText("0");
+            truckstatus.setText("idel");
+            digitSpeedView.updateSpeed(currentspeed);
+
+        }
+        else {
+            digitSpeedView.updateSpeed(currentspeed);
+            truckspeed.setText(currentspeed);
+            truckstatus.setText("Moving");
+        }
+
+
         Toast.makeText(getContext(), "" + driverlocation, Toast.LENGTH_SHORT).show();
+
+
 
 
     }
@@ -363,6 +400,10 @@ public class ActiveJobFragment extends Fragment implements View.OnClickListener,
         slng = Double.parseDouble(pref.getString("Startlng", ""));
         elat = Double.parseDouble(pref.getString("Endlat", ""));
         elng = Double.parseDouble(pref.getString("Endlng", ""));
+
+
+        jobfromaddress.setText(AppUtils.getAddress(slat,slng,getContext()));
+        jobendaddress.setText(AppUtils.getAddress(elat,elng,getContext()));
 
         MapsInitializer.initialize(getContext());
         this.googleMap = googleMap;

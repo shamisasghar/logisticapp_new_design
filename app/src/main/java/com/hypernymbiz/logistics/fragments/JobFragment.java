@@ -44,13 +44,7 @@ public class JobFragment extends Fragment implements View.OnClickListener, Toolb
         }
         mContext=context;
     }
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 
-        inflater.inflate(R.menu.menu_main, menu);
-        View view = menu.findItem(R.id.notification_bell).getActionView();
-        mNumberOfCartItemsText = (TextView) view.findViewById(R.id.text_number_of_cart_items);
-    }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_job, container, false);

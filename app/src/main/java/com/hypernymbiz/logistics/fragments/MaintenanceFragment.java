@@ -45,13 +45,6 @@ public class MaintenanceFragment extends Fragment implements View.OnClickListene
         }
     }
 
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-
-        inflater.inflate(R.menu.menu_main, menu);
-        View view = menu.findItem(R.id.notification_bell).getActionView();
-        mNumberOfCartItemsText = (TextView) view.findViewById(R.id.text_number_of_cart_items);
-    }
 
 
 

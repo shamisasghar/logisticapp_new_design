@@ -90,7 +90,6 @@ public class JobDetailsFragment extends Fragment implements View.OnClickListener
     String strlat, strlng, endlat, endlng;
 
 
-
     private long UPDATE_INTERVAL = 1000;  /* 1 sec */
     private long FASTEST_INTERVAL = 500; /* 1/2 sec */
     public static int counter = 0;
@@ -112,7 +111,7 @@ public class JobDetailsFragment extends Fragment implements View.OnClickListener
         if (context instanceof ToolbarListener) {
             ((ToolbarListener) context).setTitle("Job Details");
         }
-        fContext=context;
+        fContext = context;
     }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -127,12 +126,13 @@ public class JobDetailsFragment extends Fragment implements View.OnClickListener
         getUserAssociatedEntity = LoginUtils.getUserAssociatedEntity(getActivity());
         pref = getActivity().getSharedPreferences("TAG", MODE_PRIVATE);
 
-        String cityname;
-        cityname = AppUtils.getAddress(33.6689488, 72.9939884, fContext);
-        Toast.makeText(fContext, "" + cityname, Toast.LENGTH_SHORT).show();
+        String startaddress, endaddress;
+        startaddress = AppUtils.getAddress(33.6689488, 72.9939884, fContext);
+        endaddress = AppUtils.getAddress(33.6689488, 72.9939884, fContext);
+        Toast.makeText(fContext, "" + startaddress, Toast.LENGTH_SHORT).show();
 
-        jbstartaddress.setText(cityname);
-        jbendaddress.setText(cityname);
+        jbstartaddress.setText(startaddress);
+        jbendaddress.setText(endaddress);
 
         startLocationUpdates();
 
@@ -206,9 +206,9 @@ public class JobDetailsFragment extends Fragment implements View.OnClickListener
                                     }
                                     Intent getJobintent = getActivity().getIntent();
                                     String jobid = getJobintent.getStringExtra("jobid");
-                                    ActiveJobResume activeJobResume=new ActiveJobResume(Double.parseDouble(strlat),Double.parseDouble(strlng),Double.parseDouble(endlat),Double.parseDouble(endlng),Integer.parseInt(getUserAssociatedEntity),jobid,jbstart.getText().toString(),jbend.getText().toString(),actual_start_time);
+                                    ActiveJobResume activeJobResume = new ActiveJobResume(Double.parseDouble(strlat), Double.parseDouble(strlng), Double.parseDouble(endlat), Double.parseDouble(endlng), Integer.parseInt(getUserAssociatedEntity), jobid, jbstart.getText().toString(), jbend.getText().toString(), actual_start_time,jbname.getText().toString());
 
-                                    ActiveJobUtils.saveJobResume(getContext(),activeJobResume);
+                                    ActiveJobUtils.saveJobResume(getContext(), activeJobResume);
                                     ActiveJobUtils.jobResumed(getContext());
                                     // Toast.makeText(fContext, "hhh", Toast.LENGTH_SHORT).show();
                                     Intent intent = new Intent(getContext(), ActiveJobFragment.class);
@@ -322,7 +322,7 @@ public class JobDetailsFragment extends Fragment implements View.OnClickListener
                 ApiInterface.retrofit.getalldata(payloadNotification.job_id).enqueue(new Callback<WebAPIResponse<JobDetail>>() {
                     @Override
                     public void onResponse(Call<WebAPIResponse<JobDetail>> call, Response<WebAPIResponse<JobDetail>> response) {
-                      //  dialog.dismiss();
+                        //  dialog.dismiss();
                         if (response.isSuccessful()) {
 
                             try {
@@ -467,8 +467,8 @@ public class JobDetailsFragment extends Fragment implements View.OnClickListener
 //                                }
                                     String strttime, endtime;
 
-                                    strttime = AppUtils.getFormattedDate(response.body().response.getJobStartDatetime()) + " " + AppUtils.getTime(response.body().response.getJobStartDatetime());
-                                    endtime = AppUtils.getFormattedDate(response.body().response.getJobEndDatetime()) + " " + AppUtils.getTime(response.body().response.getJobEndDatetime());
+                                    strttime = AppUtils.getTime(response.body().response.getJobStartDatetime());
+                                    endtime = AppUtils.getTime(response.body().response.getJobEndDatetime());
                                     editor = pref.edit();
                                     editor.putString("Startjob", strttime);
                                     editor.putString("Startend", endtime);
@@ -495,9 +495,7 @@ public class JobDetailsFragment extends Fragment implements View.OnClickListener
                     }
                 });
 
-            }
-
-        else {
+            } else {
                 Intent getintent = getActivity().getIntent();
                 String id = getintent.getStringExtra("jobid");
                 ApiInterface.retrofit.getalldata(Integer.parseInt(id)).enqueue(new Callback<WebAPIResponse<JobDetail>>() {
@@ -654,8 +652,8 @@ public class JobDetailsFragment extends Fragment implements View.OnClickListener
                                     }
                                     String strttime, endtime;
 
-                                    strttime = AppUtils.getFormattedDate(response.body().response.getJobStartDatetime()) + " " + AppUtils.getTime(response.body().response.getJobStartDatetime());
-                                    endtime = AppUtils.getFormattedDate(response.body().response.getJobEndDatetime()) + " " + AppUtils.getTime(response.body().response.getJobEndDatetime());
+                                    strttime =AppUtils.getFormattedDate(response.body().response.getJobStartDatetime()) + " " +AppUtils.getDateAndTime(response.body().response.getJobStartDatetime());
+                                    endtime = AppUtils.getFormattedDate(response.body().response.getJobEndDatetime()) + " " + AppUtils.getDateAndTime(response.body().response.getJobEndDatetime());
                                     editor = pref.edit();
                                     editor.putString("Startjob", strttime);
                                     editor.putString("Startend", endtime);
@@ -684,7 +682,7 @@ public class JobDetailsFragment extends Fragment implements View.OnClickListener
                 });
 
             }
-    }
+        }
 
         return view;
     }
@@ -702,7 +700,7 @@ public class JobDetailsFragment extends Fragment implements View.OnClickListener
 
 //        longi = location.getLongitude();
 
-        Toast.makeText(getContext(), ""+driverlocation, Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(), "" + driverlocation, Toast.LENGTH_SHORT).show();
 
     }
 

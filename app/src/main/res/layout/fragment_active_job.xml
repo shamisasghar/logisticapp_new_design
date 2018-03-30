@@ -10,7 +10,7 @@
     <android.support.v7.widget.CardView
         android:id="@+id/cardView"
         android:layout_width="match_parent"
-        android:layout_height="250dp"
+        android:layout_height="180dp"
         app:layout_constraintBottom_toTopOf="@+id/layout_scrollview"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -69,7 +69,22 @@
                         android:layout_height="wrap_content"
                         android:layout_marginRight="5dp"
                         android:text="0"
+                        android:visibility="gone"
                         android:textSize="40sp" />
+                    <com.github.capur16.digitspeedviewlib.DigitSpeedView
+                        android:layout_width="50dp"
+                        android:id="@+id/digitspeed1"
+                        android:layout_height="80dp"
+                        app:speedTextSize="15sp"
+                        app:speedTextColor="@color/colorPrimary"
+                        android:gravity="center"
+                        app:disableBackgroundImage="true"
+                        app:backgroundColor="@color/colorPrimaryDark1"
+                        app:showUnit="false">
+
+                    </com.github.capur16.digitspeedviewlib.DigitSpeedView>
+
+
 
                     <LinearLayout
                         android:layout_width="wrap_content"
@@ -82,13 +97,15 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="KMPH"
-                            android:textSize="20sp" />
+                            android:textSize="20sp"
+                            android:layout_marginLeft="5dp"/>
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
-                            android:text="moving"
+                            android:text="-"
+                            android:layout_marginLeft="5dp"
                             android:id="@+id/txt_truck_status"
                             android:textSize="13sp" />
                     </LinearLayout>
@@ -104,8 +121,8 @@
                     android:layout_weight="1">
 
                     <ImageView
-                        android:layout_width="35dp"
-                        android:layout_height="35dp"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
                         android:layout_gravity="center"
                         app:srcCompat="@drawable/ic_launcher_background" />
 
@@ -281,7 +298,7 @@
                         android:layout_gravity="center"
                         android:layout_weight="0.1"
                         android:src="@drawable/ic_end_point"
-                        android:tint="@color/colorPrimaryDark" />
+                        android:tint="@color/colorPrimary" />
 
                     <LinearLayout
                         android:layout_width="0dp"
@@ -293,7 +310,7 @@
                             android:id="@+id/txt_from_address"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="From Address:" />
+                            android:text="From address:" />
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -302,14 +319,14 @@
                             <TextView
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="0.5"
-                                android:text="Assigned Departure Time" />
+                                android:layout_weight="0.4"
+                                android:text="Depart Time" />
 
                             <TextView
                                 android:id="@+id/txt_starttime"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="0.3"
+                                android:layout_weight="1"
                                 android:text="9:00 AM" />
                         </LinearLayout>
 
@@ -321,13 +338,14 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="0.4"
-                                android:text="Your Departure Time" />
+                                android:text="Your DepartTime" />
 
                             <TextView
                                 android:id="@+id/txt_actual_starttime"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="0.3"
+                                android:layout_weight="1"
+                                android:layout_gravity="center"
                                 android:text="9:00 AM" />
                         </LinearLayout>
                     </LinearLayout>
@@ -372,14 +390,14 @@
                             <TextView
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="0.2"
+                                android:layout_weight="0.4"
                                 android:text="Arrival Time" />
 
                             <TextView
                                 android:id="@+id/txt_endtime"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="0.3"
+                                android:layout_weight="1"
                                 android:text="9:00 AM" />
                         </LinearLayout>
                     </LinearLayout>
