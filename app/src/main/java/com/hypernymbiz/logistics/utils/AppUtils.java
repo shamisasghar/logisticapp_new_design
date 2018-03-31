@@ -399,7 +399,7 @@ public class AppUtils {
 
     private static int getNotificationIcon() {
         boolean useWhiteIcon = (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP);
-        return useWhiteIcon ? R.drawable.ic_check : R.mipmap.ic_launcher;
+        return useWhiteIcon ? R.drawable.ic_launcher : R.mipmap.ic_launcher;
     }
 
  public static String getErrorMessage(Context context, int statusCode) {

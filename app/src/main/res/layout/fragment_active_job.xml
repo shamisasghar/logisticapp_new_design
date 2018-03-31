@@ -72,7 +72,7 @@
                         android:visibility="gone"
                         android:textSize="40sp" />
                     <com.github.capur16.digitspeedviewlib.DigitSpeedView
-                        android:layout_width="50dp"
+                        android:layout_width="80dp"
                         android:id="@+id/digitspeed1"
                         android:layout_height="80dp"
                         app:speedTextSize="15sp"

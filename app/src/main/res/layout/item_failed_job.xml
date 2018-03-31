@@ -18,7 +18,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="JOB"
-                android:textColor="@color/colorAccent"
+                android:textColor="@color/colorTabsText"
                 android:id="@+id/txt_job_name"/>
             <View
                 android:layout_width="5dp"
@@ -42,7 +42,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Start time:"
-                android:textColor="@color/colorAccent"
+                android:textColor="@color/colorTabsText"
                 android:layout_marginRight="5dp"/>
             <TextView
                 android:layout_width="wrap_content"
@@ -58,7 +58,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="End time:"
-                android:textColor="@color/colorAccent"
+                android:textColor="@color/colorTabsText"
                 android:layout_marginRight="10dp"/>
             <TextView
                 android:layout_width="wrap_content"

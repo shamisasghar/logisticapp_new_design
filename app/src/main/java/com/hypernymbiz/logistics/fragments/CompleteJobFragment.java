@@ -35,13 +35,7 @@ public class CompleteJobFragment extends Fragment {
     private CompleteJobAdapter completeJobAdapter;
     private List<JobInfo_> jobInfo_s;
     String getUserAssociatedEntity;
-//    @Override
-//    public void onAttach(Context context) {
-//        super.onAttach(context);
-//        if (context instanceof ToolbarListener) {
-//            ((ToolbarListener) context).setTitle("Jobs");
-//        }
-//    }
+
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
        view = inflater.inflate(R.layout.fragment_view_pager_job_compltd, container, false);

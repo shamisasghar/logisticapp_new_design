@@ -31,6 +31,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.github.capur16.digitspeedviewlib.DigitSpeedView;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -110,7 +111,7 @@ public class HomeFragment extends Fragment  implements View.OnClickListener, OnM
     LocationRequest locationRequest;
     Context mContext;
     CardView mapcardalayout;
-
+    DigitSpeedView digitSpeedView;
 
     public static void startActivity(Context context) {
         context.startActivity(new Intent(context, HomeFragment.class));
@@ -167,6 +168,7 @@ public class HomeFragment extends Fragment  implements View.OnClickListener, OnM
         starttime_inprogress=(TextView)view.findViewById(R.id.txt_starttime);
         endtime_inprogress=(TextView)view.findViewById(R.id.txt_endtime);
         jobname_inprogress=(TextView)view.findViewById(R.id.txt_job_name);
+        digitSpeedView=(DigitSpeedView) view.findViewById(R.id.digitspeed1);
 
 
         if (!ActiveJobUtils.isJobResumed(getContext())){
@@ -302,6 +304,7 @@ public class HomeFragment extends Fragment  implements View.OnClickListener, OnM
 
             }
         });
+
 
     }
 
@@ -477,6 +480,24 @@ public class HomeFragment extends Fragment  implements View.OnClickListener, OnM
 
     @Override
     public void onLocationChanged(final Location location) {
+
+
+
+        int currentspeed = (int) ((location.getSpeed() * 3600) / 1000);
+
+        if(location==null)
+        {
+
+//            truckspeed.setText("0");
+//            truckstatus.setText("idel");
+            digitSpeedView.updateSpeed(currentspeed);
+
+        }
+        else {
+            digitSpeedView.updateSpeed(currentspeed);
+//            truckspeed.setText(currentspeed);
+//            truckstatus.setText("Moving");
+        }
 
 
 

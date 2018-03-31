@@ -8,13 +8,15 @@
     <android.support.v7.widget.CardView
         android:id="@+id/cardviewhome_map"
         android:layout_width="match_parent"
-        android:layout_height="200dp">
+        android:layout_height="270dp">
 
         <fragment
             android:id="@+id/mapView"
             android:name="com.google.android.gms.maps.SupportMapFragment"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"></fragment>
+            android:layout_height="match_parent">
+
+        </fragment>
         <!--<RelativeLayout-->
         <!--android:layout_width="match_parent"-->
         <!--android:layout_height="wrap_content">-->
@@ -54,7 +56,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="0dp"
             android:orientation="vertical">
 
             <LinearLayout
@@ -70,15 +72,15 @@
                     android:layout_weight="1">
 
                     <ImageView
-                        android:layout_width="30dp"
-                        android:layout_height="wrap_content"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
                         android:src="@drawable/ic_launcher_background" />
 
                     <TextView
                         android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:layout_marginLeft="5dp"
-                        android:gravity="center"
+                        android:layout_gravity="center"
                         android:text="Truckname 01"
                         android:textStyle="bold" />
                 </LinearLayout>
@@ -95,13 +97,27 @@
                         android:layout_height="wrap_content"
                         android:layout_marginRight="5dp"
                         android:text="47"
+                        android:visibility="gone"
                         android:textSize="30sp" />
+                    <com.github.capur16.digitspeedviewlib.DigitSpeedView
+                        android:layout_width="100dp"
+                        android:id="@+id/digitspeed1"
+                        android:layout_height="80dp"
+                        app:speedTextSize="15sp"
+                        app:speedTextColor="@color/colorPrimary"
+                        android:gravity="center"
+                        app:disableBackgroundImage="true"
+                        app:backgroundColor="@color/colorPrimaryDark1"
+                        app:showUnit="false">
+
+                    </com.github.capur16.digitspeedviewlib.DigitSpeedView>
+
 
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="15dp"
-                        android:gravity="start"
+                        android:layout_gravity="center"
                         android:orientation="vertical">
 
                         <TextView
@@ -128,6 +144,7 @@
                 android:layout_marginLeft="13dp"
                 android:layout_marginRight="13dp"
                 android:layout_marginTop="5dp"
+                android:visibility="gone"
                 android:background="@color/colorPrimary">
 
                 <LinearLayout
@@ -163,7 +180,7 @@
                             <TextView
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="0.5"
+                                android:layout_weight="0.2"
                                 android:gravity="center"
                                 android:id="@+id/txt_job_name"
                                 android:text="JOB"
@@ -361,8 +378,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="15dp"
-                android:layout_marginRight="15dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
                 android:orientation="horizontal">
 
                 <LinearLayout
@@ -449,8 +466,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="14dp"
-                android:layout_marginRight="14dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
                 android:layout_marginTop="14dp">
 
                 <LinearLayout

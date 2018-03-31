@@ -7,9 +7,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.hypernymbiz.logistics.FrameActivity;
 import com.hypernymbiz.logistics.R;
+import com.hypernymbiz.logistics.fragments.CompletedJobDetail;
 import com.hypernymbiz.logistics.fragments.JobDetailsFragment;
 import com.hypernymbiz.logistics.model.JobInfo_;
 import com.hypernymbiz.logistics.model.Respone_Completed_job;
@@ -57,10 +59,9 @@ public class CompleteJobAdapter extends RecyclerView.Adapter<CompleteJobAdapter.
             public void onClick(View view) {
                 Integer id = jobInfo_s.get(position).getJobId();
 
-
                 Intent intent = new Intent(context, FrameActivity.class);
-                intent.putExtra("jobid", "406");
-                intent.putExtra(Constants.FRAGMENT_NAME, JobDetailsFragment.class.getName());
+//                intent.putExtra("jobid",  Integer.toString(id));
+                intent.putExtra(Constants.FRAGMENT_NAME, CompletedJobDetail.class.getName());
 //                    intent.putExtra(Constants.DATA, bundle);
                 context.startActivity(intent);
             }
