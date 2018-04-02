@@ -114,7 +114,7 @@ public class ActiveJobFragment extends Fragment implements View.OnClickListener,
     Boolean check = true;
     ImageView btn_dialog_okk, btn_dialog_cls, btn_dialog_fail_ok, btn_dialog_fail_cls;
     TextView truckspeed, truckstatus,jobStarttime,yourstarttime,jobendtime,jobfromaddress,jobendaddress;
-
+    ImageButton mylocation;
     View view;
     Calendar c;
     String driverendtime;
@@ -153,7 +153,7 @@ public class ActiveJobFragment extends Fragment implements View.OnClickListener,
         supportMapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.mapView);
         getUserAssociatedEntity = LoginUtils.getUserAssociatedEntity(getContext());
         context = getContext();
-//        mylocation = (ImageButton) view.findViewById(R.id.img_location);
+        mylocation = (ImageButton) view.findViewById(R.id.img_location);
         initMap();
         startLocationUpdates();
 
@@ -173,9 +173,15 @@ public class ActiveJobFragment extends Fragment implements View.OnClickListener,
         endtime=pref.getString("Startend", "");
         actualstarttime=pref.getString("drivertime", "");
 
-        jobStarttime.setText(starttime.toString());
-        jobendtime.setText(endtime.toString());
-        yourstarttime.setText(actualstarttime);
+        Toast.makeText(context, ""+starttime, Toast.LENGTH_SHORT).show();
+//        SimpleDateFormat actualdateFmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+//        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+//        String formattedDate = dateFormat.format(actualstarttime).toString();
+//        System.out.println(formattedDate);
+
+        jobStarttime.setText(starttime);
+        jobendtime.setText(endtime);
+        yourstarttime.setText(AppUtils.getTimedate(actualstarttime));
 
 
 
@@ -357,6 +363,15 @@ public class ActiveJobFragment extends Fragment implements View.OnClickListener,
             googleMap.animateCamera(update);
             check = false;
         }
+        mylocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CameraUpdate update = CameraUpdateFactory.newLatLngZoom(ll, 15.8f);
+                googleMap.animateCamera(update);
+            }
+        });
+
+
 
 
         option = new MarkerOptions().title("Driver Location").position(new LatLng(location.getLatitude(), location.getLongitude())).icon((BitmapDescriptorFactory.fromResource(R.drawable.ic_location)));
@@ -371,11 +386,11 @@ public class ActiveJobFragment extends Fragment implements View.OnClickListener,
 
         int currentspeed = (int) ((location.getSpeed() * 3600) / 1000);
 
-        if(location==null)
+        if(currentspeed<1)
         {
 
-            truckspeed.setText("0");
-            truckstatus.setText("idel");
+
+            truckstatus.setText("Idel");
             digitSpeedView.updateSpeed(currentspeed);
 
         }

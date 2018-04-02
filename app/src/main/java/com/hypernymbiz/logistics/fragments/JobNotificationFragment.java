@@ -18,6 +18,7 @@ import android.widget.ImageView;
 import com.hypernymbiz.logistics.R;
 import com.hypernymbiz.logistics.adapter.JobNotifiyAdapter;
 import com.hypernymbiz.logistics.api.ApiInterface;
+import com.hypernymbiz.logistics.dialog.LoadingDialog;
 import com.hypernymbiz.logistics.model.JobInfo;
 import com.hypernymbiz.logistics.model.WebAPIResponse;
 import com.hypernymbiz.logistics.toolbox.ToolbarListener;
@@ -45,6 +46,8 @@ public class JobNotificationFragment extends Fragment {
     Context fContext;
     ImageView imageView;
     View view;
+    LoadingDialog dialog;
+
 
     @Override
     public void onAttach(Context context) {
@@ -66,10 +69,10 @@ public class JobNotificationFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         swipelayout = (SwipeRefreshLayout) view.findViewById(R.id.layout_swipe);
         constraintLayout = (ConstraintLayout) view.findViewById(R.id.layout_constraint1);
-//        dialog = new LoadingDialog(getActivity(), getString(R.string.msg_loading));
-//        dialog.setCancelable(false);
-//        dialog.setCanceledOnTouchOutside(false);
-//        dialog.show();
+        dialog = new LoadingDialog(getActivity(), getString(R.string.msg_loading));
+        dialog.setCancelable(false);
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.show();
 
 
         //  swipe();
@@ -122,7 +125,7 @@ public class JobNotificationFragment extends Fragment {
                 @Override
                 public void onResponse(Call<WebAPIResponse<List<JobInfo>>> call, Response<WebAPIResponse<List<JobInfo>>> response) {
 
-//                    dialog.dismiss();
+                    dialog.dismiss();
                     if (response.isSuccessful()) {
                         try {
                             if (response.body().status) {
@@ -152,7 +155,7 @@ public class JobNotificationFragment extends Fragment {
 
                 @Override
                 public void onFailure(Call<WebAPIResponse<List<JobInfo>>> call, Throwable t) {
-//                    dialog.dismiss();
+                   dialog.dismiss();
                     AppUtils.showSnackBar(getView(), AppUtils.getErrorMessage(getContext(), Constants.NETWORK_ERROR));
 
                 }

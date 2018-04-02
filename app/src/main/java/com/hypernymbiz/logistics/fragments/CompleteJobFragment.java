@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import com.hypernymbiz.logistics.R;
 import com.hypernymbiz.logistics.adapter.CompleteJobAdapter;
 import com.hypernymbiz.logistics.api.ApiInterface;
+import com.hypernymbiz.logistics.dialog.LoadingDialog;
 import com.hypernymbiz.logistics.model.JobInfo_;
 import com.hypernymbiz.logistics.model.Respone_Completed_job;
 import com.hypernymbiz.logistics.model.WebAPIResponse;
@@ -35,6 +36,7 @@ public class CompleteJobFragment extends Fragment {
     private CompleteJobAdapter completeJobAdapter;
     private List<JobInfo_> jobInfo_s;
     String getUserAssociatedEntity;
+    LoadingDialog dialog;
 
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -45,12 +47,22 @@ public class CompleteJobFragment extends Fragment {
         layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setHasFixedSize(true);
+
         getUserAssociatedEntity = LoginUtils.getUserAssociatedEntity(getContext());
+        dialog = new LoadingDialog(getActivity(), getString(R.string.msg_loading));
+        dialog.setCancelable(false);
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.show();
+
+
+
+
         if (getUserAssociatedEntity != null) {
 
             ApiInterface.retrofit.getalldata(Integer.parseInt(getUserAssociatedEntity), 55).enqueue(new Callback<WebAPIResponse<Respone_Completed_job>>() {
                 @Override
                 public void onResponse(Call<WebAPIResponse<Respone_Completed_job>> call, Response<WebAPIResponse<Respone_Completed_job>> response) {
+                    dialog.dismiss();
                     if (response.isSuccessful()) {
                         try {
                             if (response.body().status) {
@@ -60,6 +72,7 @@ public class CompleteJobFragment extends Fragment {
                                 recyclerView.setAdapter(completeJobAdapter);
                             }
                         } catch (Exception ex) {
+                            dialog.dismiss();
                             AppUtils.showSnackBar(getView(), AppUtils.getErrorMessage(getContext(), Constants.NETWORK_ERROR));
                         }
                     } else {
@@ -70,7 +83,7 @@ public class CompleteJobFragment extends Fragment {
 
                 @Override
                 public void onFailure(Call<WebAPIResponse<Respone_Completed_job>> call, Throwable t) {
-
+                    dialog.dismiss();
                     AppUtils.showSnackBar(getView(), AppUtils.getErrorMessage(getContext(), Constants.NETWORK_ERROR));
 
                 }

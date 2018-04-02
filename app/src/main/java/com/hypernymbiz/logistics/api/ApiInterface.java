@@ -68,6 +68,8 @@ public interface ApiInterface {
 
     @GET("iof/get_app_jobs/")
     Call<WebAPIResponse<JobDetail>> getalldata(@Query("job_id") int job_id);
+
+
     @GET("iof/get_app_maintenances/")
     Call<WebAPIResponse<Maintenance>> getmaintenancedata(@Query("driver_id") int driver_id, @Query("m_id") int maintenance_id);
 

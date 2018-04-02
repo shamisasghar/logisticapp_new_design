@@ -95,8 +95,8 @@ public class CompletedJobDetail extends Fragment implements com.google.android.g
 //
 //            }
 //        });
-//
-//
+
+
 
 
 

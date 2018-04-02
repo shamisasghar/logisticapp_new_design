@@ -36,6 +36,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.hypernymbiz.logistics.FrameActivity;
 import com.hypernymbiz.logistics.R;
 import com.hypernymbiz.logistics.api.ApiInterface;
+import com.hypernymbiz.logistics.dialog.LoadingDialog;
 import com.hypernymbiz.logistics.dialog.SimpleDialog;
 import com.hypernymbiz.logistics.model.ActiveJobResume;
 import com.hypernymbiz.logistics.model.JobDetail;
@@ -88,6 +89,7 @@ public class JobDetailsFragment extends Fragment implements View.OnClickListener
     String driverlocation;
     LatLng ll;
     String strlat, strlng, endlat, endlng;
+    LoadingDialog dialog;
 
 
     private long UPDATE_INTERVAL = 1000;  /* 1 sec */
@@ -125,6 +127,13 @@ public class JobDetailsFragment extends Fragment implements View.OnClickListener
         jbend = (TextView) view.findViewById(R.id.txt_endtime);
         getUserAssociatedEntity = LoginUtils.getUserAssociatedEntity(getActivity());
         pref = getActivity().getSharedPreferences("TAG", MODE_PRIVATE);
+
+        dialog = new LoadingDialog(getActivity(), getString(R.string.msg_loading));
+        dialog.setCancelable(false);
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.show();
+
+
 
         String startaddress, endaddress;
         startaddress = AppUtils.getAddress(33.6689488, 72.9939884, fContext);
@@ -322,7 +331,7 @@ public class JobDetailsFragment extends Fragment implements View.OnClickListener
                 ApiInterface.retrofit.getalldata(payloadNotification.job_id).enqueue(new Callback<WebAPIResponse<JobDetail>>() {
                     @Override
                     public void onResponse(Call<WebAPIResponse<JobDetail>> call, Response<WebAPIResponse<JobDetail>> response) {
-                        //  dialog.dismiss();
+                          dialog.dismiss();
                         if (response.isSuccessful()) {
 
                             try {
@@ -362,6 +371,7 @@ public class JobDetailsFragment extends Fragment implements View.OnClickListener
                                                             try {
 
                                                             } catch (Exception ex) {
+                                                                dialog.dismiss();
                                                                 AppUtils.showSnackBar(getView(), AppUtils.getErrorMessage(getContext(), Constants.NETWORK_ERROR));
 
                                                             }
@@ -467,8 +477,8 @@ public class JobDetailsFragment extends Fragment implements View.OnClickListener
 //                                }
                                     String strttime, endtime;
 
-                                    strttime = AppUtils.getTime(response.body().response.getJobStartDatetime());
-                                    endtime = AppUtils.getTime(response.body().response.getJobEndDatetime());
+                                    strttime = AppUtils.getTimedate(response.body().response.getJobStartDatetime());
+                                    endtime = AppUtils.getTimedate(response.body().response.getJobEndDatetime());
                                     editor = pref.edit();
                                     editor.putString("Startjob", strttime);
                                     editor.putString("Startend", endtime);
@@ -489,6 +499,7 @@ public class JobDetailsFragment extends Fragment implements View.OnClickListener
 
                     @Override
                     public void onFailure(Call<WebAPIResponse<JobDetail>> call, Throwable t) {
+                        dialog.dismiss();
 
                         AppUtils.showSnackBar(getView(), AppUtils.getErrorMessage(getContext(), Constants.NETWORK_ERROR));
 
@@ -501,7 +512,7 @@ public class JobDetailsFragment extends Fragment implements View.OnClickListener
                 ApiInterface.retrofit.getalldata(Integer.parseInt(id)).enqueue(new Callback<WebAPIResponse<JobDetail>>() {
                     @Override
                     public void onResponse(Call<WebAPIResponse<JobDetail>> call, Response<WebAPIResponse<JobDetail>> response) {
-                        //  dialog.dismiss();
+                          dialog.dismiss();
                         if (response.isSuccessful()) {
                             try {
                                 if (response.body().status) {
@@ -621,6 +632,7 @@ public class JobDetailsFragment extends Fragment implements View.OnClickListener
 
                                                             @Override
                                                             public void onFailure(Call<WebAPIResponse<StartJob>> call, Throwable t) {
+                                                                dialog.dismiss();
                                                                 AppUtils.showSnackBar(getView(), AppUtils.getErrorMessage(getContext(), Constants.NETWORK_ERROR));
 
                                                             }
@@ -652,8 +664,8 @@ public class JobDetailsFragment extends Fragment implements View.OnClickListener
                                     }
                                     String strttime, endtime;
 
-                                    strttime =AppUtils.getFormattedDate(response.body().response.getJobStartDatetime()) + " " +AppUtils.getDateAndTime(response.body().response.getJobStartDatetime());
-                                    endtime = AppUtils.getFormattedDate(response.body().response.getJobEndDatetime()) + " " + AppUtils.getDateAndTime(response.body().response.getJobEndDatetime());
+                                    strttime =AppUtils.getFormattedDate(response.body().response.getJobStartDatetime()) + " " +AppUtils.getTime(response.body().response.getJobStartDatetime());
+                                    endtime = AppUtils.getFormattedDate(response.body().response.getJobEndDatetime()) + " " + AppUtils.getTime(response.body().response.getJobEndDatetime());
                                     editor = pref.edit();
                                     editor.putString("Startjob", strttime);
                                     editor.putString("Startend", endtime);
@@ -663,6 +675,7 @@ public class JobDetailsFragment extends Fragment implements View.OnClickListener
 
                                 }
                             } catch (Exception ex) {
+                                dialog.dismiss();
                                 AppUtils.showSnackBar(getView(), AppUtils.getErrorMessage(getContext(), Constants.NETWORK_ERROR));
 
 
@@ -675,7 +688,7 @@ public class JobDetailsFragment extends Fragment implements View.OnClickListener
 
                     @Override
                     public void onFailure(Call<WebAPIResponse<JobDetail>> call, Throwable t) {
-                        //  dialog.dismiss();
+                         dialog.dismiss();
                         AppUtils.showSnackBar(getView(), AppUtils.getErrorMessage(getContext(), Constants.NETWORK_ERROR));
 
                     }

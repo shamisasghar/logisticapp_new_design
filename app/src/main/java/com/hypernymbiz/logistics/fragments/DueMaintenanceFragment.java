@@ -12,6 +12,7 @@ import com.hypernymbiz.logistics.R;
 import com.hypernymbiz.logistics.adapter.MaintenanceCompleteAdapter;
 import com.hypernymbiz.logistics.adapter.MaintenanceDueAdapter;
 import com.hypernymbiz.logistics.api.ApiInterface;
+import com.hypernymbiz.logistics.dialog.LoadingDialog;
 import com.hypernymbiz.logistics.model.MaintenanceOverdue;
 import com.hypernymbiz.logistics.model.WebAPIResponse;
 import com.hypernymbiz.logistics.utils.AppUtils;
@@ -35,12 +36,20 @@ public class DueMaintenanceFragment extends Fragment {
     private List<MaintenanceOverdue> maintenanceOverdues;
     String getUserAssociatedEntity;
     View view;
+    LoadingDialog dialog;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_view_pager_maintenance_due, container, false);
         recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view_maintenance_due);
 
         layoutManager = new LinearLayoutManager(getContext());
+
+        dialog = new LoadingDialog(getActivity(), getString(R.string.msg_loading));
+        dialog.setCancelable(false);
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.show();
+
+
 
 
         recyclerView.setLayoutManager(layoutManager);
@@ -51,7 +60,9 @@ public class DueMaintenanceFragment extends Fragment {
             ApiInterface.retrofit.getallmaintenanceoverdue(Integer.parseInt(getUserAssociatedEntity),73).enqueue(new Callback<WebAPIResponse<List<MaintenanceOverdue>>>() {
                 @Override
                 public void onResponse(Call<WebAPIResponse<List<MaintenanceOverdue>>> call, Response<WebAPIResponse<List<MaintenanceOverdue>>> response) {
+                    dialog.dismiss();
                     if (response.isSuccessful()) {
+
                         try {
                             if (response.body().status) {
                                 // Toast.makeText(getContext(), "List Detail"+Integer.toString(response.body().response.job_info.size()), Toast.LENGTH_SHORT).show();
@@ -60,6 +71,7 @@ public class DueMaintenanceFragment extends Fragment {
                                 recyclerView.setAdapter(maintenanceOverdueAdapter);
                             }
                         } catch (Exception ex) {
+                            dialog.dismiss();
                             AppUtils.showSnackBar(getView(), AppUtils.getErrorMessage(getContext(), Constants.NETWORK_ERROR));
                         }
                     } else {
@@ -70,7 +82,7 @@ public class DueMaintenanceFragment extends Fragment {
 
                 @Override
                 public void onFailure(Call<WebAPIResponse<List<MaintenanceOverdue>>> call, Throwable t) {
-
+                    dialog.dismiss();
                     AppUtils.showSnackBar(getView(), AppUtils.getErrorMessage(getContext(), Constants.NETWORK_ERROR));
 
                 }

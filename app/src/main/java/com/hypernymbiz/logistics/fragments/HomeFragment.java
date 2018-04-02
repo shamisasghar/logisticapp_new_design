@@ -43,6 +43,7 @@ import com.google.android.gms.maps.model.PolylineOptions;
 import com.hypernymbiz.logistics.FrameActivity;
 import com.hypernymbiz.logistics.R;
 import com.hypernymbiz.logistics.api.ApiInterface;
+import com.hypernymbiz.logistics.dialog.LoadingDialog;
 import com.hypernymbiz.logistics.model.ActiveJobResume;
 import com.hypernymbiz.logistics.model.DirectionsJSONParser;
 import com.hypernymbiz.logistics.model.JobCount;
@@ -87,7 +88,7 @@ public class HomeFragment extends Fragment  implements View.OnClickListener, OnM
 
     //    private ViewHolder mHolder;
     View view;
-
+    Dialog lastjob;
     MapView mMapView;
     GoogleMap googleMap;
     SupportMapFragment supportMapFragment;
@@ -96,18 +97,19 @@ public class HomeFragment extends Fragment  implements View.OnClickListener, OnM
     GoogleApiClient googleApiClient;
     Marker marker, marker2, marker3;
     EditText editText;
-    ImageButton img;
+    ImageButton mylocation;
+    LoadingDialog dialog;
     String size;
     TextView fromaddress_inprogress,toaddress_inprogress,starttime_inprogress,endtime_inprogress,jobname_inprogress;
 
     Location location;
     LatLng ll;
     boolean check = true;
-    boolean chk = true;
+    boolean checklocation = true;
     CameraUpdate update;
     LatLng dest = new LatLng(33.6689488, 72.9939884);
-    TextView mNumberOfCartItemsText;
-    LinearLayout linear_job, linear_maintenance, linear_violation, linear_inprogress;
+    TextView mNumberOfCartItemsText,turckstatus;
+    LinearLayout linear_job, linear_maintenance, linear_violation, linear_inprogress,linear_lastjob;
     LocationRequest locationRequest;
     Context mContext;
     CardView mapcardalayout;
@@ -162,18 +164,33 @@ public class HomeFragment extends Fragment  implements View.OnClickListener, OnM
         linear_maintenance = (LinearLayout) view.findViewById(R.id.layout_linear_maintenance);
         linear_violation = (LinearLayout) view.findViewById(R.id.layout_linear_violation);
         linear_inprogress = (LinearLayout) view.findViewById(R.id.layout_linear_inprogress);
+        linear_lastjob=(LinearLayout) view.findViewById(R.id.layout_linear_lastjob);
 
         fromaddress_inprogress=(TextView)view.findViewById(R.id.txt_from_address);
         toaddress_inprogress=(TextView)view.findViewById(R.id.txt_to_address);
+        turckstatus=(TextView)view.findViewById(R.id.txt_truck_status);
         starttime_inprogress=(TextView)view.findViewById(R.id.txt_starttime);
         endtime_inprogress=(TextView)view.findViewById(R.id.txt_endtime);
         jobname_inprogress=(TextView)view.findViewById(R.id.txt_job_name);
+        mylocation=(ImageButton) view.findViewById(R.id.btn_mylocation);
         digitSpeedView=(DigitSpeedView) view.findViewById(R.id.digitspeed1);
+
+        dialog = new LoadingDialog(getActivity(), getString(R.string.msg_loading));
+        dialog.setCancelable(false);
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.show();
+
+
+
 
 
         if (!ActiveJobUtils.isJobResumed(getContext())){
             linear_inprogress.setVisibility(View.GONE);
-            mapcardalayout.setMinimumHeight(300);
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    800
+            );
+            mapcardalayout.setLayoutParams(params);
         }
         else{
             linear_inprogress.setVisibility(View.VISIBLE);
@@ -232,6 +249,19 @@ public class HomeFragment extends Fragment  implements View.OnClickListener, OnM
             }
         });
 
+        linear_lastjob.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Toast.makeText(getContext(), "lastjob", Toast.LENGTH_SHORT).show();
+                complete = new Dialog(getContext());
+                complete.setContentView(R.layout.dialog_complete_job);
+                complete.setCanceledOnTouchOutside(false);
+                complete.show();
+                complete.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            }
+        });
+
 
         buildGoogleApiClient();
         initMap();
@@ -251,6 +281,11 @@ public class HomeFragment extends Fragment  implements View.OnClickListener, OnM
         super.onResume();
         if (!ActiveJobUtils.isJobResumed(getContext())){
             linear_inprogress.setVisibility(View.GONE);
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    800
+            );
+            mapcardalayout.setLayoutParams(params);
 
         }
         else{
@@ -274,7 +309,7 @@ public class HomeFragment extends Fragment  implements View.OnClickListener, OnM
         ApiInterface.retrofit.getcount().enqueue(new Callback<WebAPIResponse<List<JobCount>>>() {
             @Override
             public void onResponse(Call<WebAPIResponse<List<JobCount>>> call, Response<WebAPIResponse<List<JobCount>>> response) {
-                // dialog.dismiss();
+                 dialog.dismiss();
                 if (response.isSuccessful()) {
                     if (response.body().status) {
                         size = String.valueOf(response.body().response.get(0).getCount());
@@ -289,7 +324,7 @@ public class HomeFragment extends Fragment  implements View.OnClickListener, OnM
                     }
 
                 } else {
-                    //  dialog.dismiss();
+                     dialog.dismiss();
                     AppUtils.showSnackBar(getView(), AppUtils.getErrorMessage(getContext(), 2));
 
                 }
@@ -299,7 +334,7 @@ public class HomeFragment extends Fragment  implements View.OnClickListener, OnM
 
             @Override
             public void onFailure(Call<WebAPIResponse<List<JobCount>>> call, Throwable t) {
-                //   dialog.dismiss();
+                  dialog.dismiss();
                 AppUtils.showSnackBar(getView(), AppUtils.getErrorMessage(getContext(), Constants.NETWORK_ERROR));
 
             }
@@ -433,11 +468,21 @@ public class HomeFragment extends Fragment  implements View.OnClickListener, OnM
         }
 
         if (ll!=null) {
-            if(chk==true) {
+            if(checklocation==true) {
                 CameraUpdate update = CameraUpdateFactory.newLatLngZoom(ll, 15.8f);
                 googleMap.animateCamera(update);
-                chk =false;
+                checklocation =false;
             }
+            mylocation.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    CameraUpdate update = CameraUpdateFactory.newLatLngZoom(ll, 15.8f);
+                    googleMap.animateCamera(update);
+                }
+            });
+
+
+
             option = new MarkerOptions().title("location").icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_location)).position(new LatLng(ll.latitude, ll.longitude));
             marker = googleMap.addMarker(option);
 //            Toast.makeText(getActivity(), "location has been get"+Double.toString(ll.latitude), Toast.LENGTH_SHORT).show();
@@ -485,18 +530,18 @@ public class HomeFragment extends Fragment  implements View.OnClickListener, OnM
 
         int currentspeed = (int) ((location.getSpeed() * 3600) / 1000);
 
-        if(location==null)
+        if(currentspeed<1)
         {
 
 //            truckspeed.setText("0");
-//            truckstatus.setText("idel");
+            turckstatus.setText("Idel");
             digitSpeedView.updateSpeed(currentspeed);
 
         }
         else {
             digitSpeedView.updateSpeed(currentspeed);
 //            truckspeed.setText(currentspeed);
-//            truckstatus.setText("Moving");
+            turckstatus.setText("Moving");
         }
 
 
