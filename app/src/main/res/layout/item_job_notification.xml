@@ -30,7 +30,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="07"
+                android:text="n/a"
                 android:textStyle="bold"
                 android:id="@+id/txt_notification_id"/>
             <TextView
@@ -39,7 +39,7 @@
                 android:layout_weight="1"
                 android:gravity="end"
                 android:id="@+id/txt_job_time"
-                android:text="05:30 PM"/>
+                android:text="n/a"/>
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
@@ -48,8 +48,8 @@
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="Job Name"
-             android:layout_weight="1"
+                android:text="n/a"
+             android:layout_weight="3"
                 android:textStyle="bold"
                 android:layout_marginEnd="5dp"
                 android:id="@+id/jobname"/>
@@ -60,7 +60,7 @@
                 android:gravity="end"
                 android:layout_marginRight="5dp"
                 android:id="@+id/txt_job_date"
-                android:text="23/07/17"/>
+                android:text="n/a"/>
         </LinearLayout>
 
     </LinearLayout>

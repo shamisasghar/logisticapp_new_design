@@ -21,7 +21,7 @@
 
                 android:textColor="@color/colorTabsText"
                 android:id="@+id/txt_job_name"
-                android:text="JOB"/>
+                android:text="n/a" />
             <!--<TextView-->
                 <!--android:layout_width="wrap_content"-->
                 <!--android:layout_height="wrap_content"-->
@@ -43,7 +43,7 @@
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
-                android:text="COMPLETE"
+                android:text="n/a"
                 android:id="@+id/txt_job_status"/>
         </LinearLayout>
         <LinearLayout
@@ -59,7 +59,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/txt_job_starttime"
-                android:text="feburary 27,2018 11:30 am"/>
+                android:text="n/a"/>
 
         </LinearLayout>
         <LinearLayout
@@ -75,7 +75,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/txt_job_endtime"
-                android:text="feburary 27,2018 11:30 am"/>
+                android:text="n/a"/>
 
         </LinearLayout>
     </LinearLayout>

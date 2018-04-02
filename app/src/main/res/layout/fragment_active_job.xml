@@ -132,7 +132,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_marginLeft="5dp"
-                        android:text="Truckname 01"
+                        android:text="n/a"
                         android:textSize="16sp"
                         android:textStyle="bold" />
                 </LinearLayout>
@@ -310,7 +310,9 @@
                             android:id="@+id/txt_from_address"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="From address:" />
+                            android:text="n/a"
+
+                            android:textStyle="bold"/>
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -320,14 +322,16 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="0.4"
-                                android:text="Depart Time" />
+                                android:textColor="@color/colorTabsText"
+                                android:text="Depart Time :"
+                                android:textStyle="bold"/>
 
                             <TextView
                                 android:id="@+id/txt_starttime"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:text="9:00 AM" />
+                                android:text="n/a" />
                         </LinearLayout>
 
                         <LinearLayout
@@ -338,7 +342,9 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="0.4"
-                                android:text="Your DepartTime" />
+                                android:text="Your DepartTime :"
+                                android:textColor="@color/colorTabsText"
+                                android:textStyle="bold"/>
 
                             <TextView
                                 android:id="@+id/txt_actual_starttime"
@@ -346,7 +352,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:layout_gravity="center"
-                                android:text="9:00 AM" />
+                                android:text="n/a" />
                         </LinearLayout>
                     </LinearLayout>
                 </LinearLayout>
@@ -381,7 +387,7 @@
                             android:id="@+id/txt_to_address"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="To Address:" />
+                            android:text="n/a" />
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -391,14 +397,16 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="0.4"
-                                android:text="Arrival Time" />
+                                android:text="Arrival Time :"
+                                android:textColor="@color/colorTabsText"
+                                android:textStyle="bold"/>
 
                             <TextView
                                 android:id="@+id/txt_endtime"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:text="9:00 AM" />
+                                android:text="n/a" />
                         </LinearLayout>
                     </LinearLayout>
 

@@ -23,7 +23,8 @@
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
             android:layout_margin="18dp"
-            android:text="JOB 7"
+            android:textColor="#000000"
+            android:text="n/a"
             android:textSize="15sp"
             android:textStyle="bold" />
 
@@ -58,7 +59,9 @@
                     android:id="@+id/txt_from_address"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="From Address:" />
+                    android:textSize="13sp"
+                    android:textStyle="bold"
+                    android:text="n/a" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -68,7 +71,8 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.2"
-                        android:text="Departure Time" />
+                        android:text="Depart Time"
+                        android:textStyle="bold"/>
 
                     <TextView
                         android:id="@+id/txt_starttime"
@@ -111,7 +115,8 @@
                     android:id="@+id/txt_to_address"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="To Address:" />
+                    android:text="n/a"
+                    android:textStyle="bold"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -121,7 +126,8 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.2"
-                        android:text="Arrival Time" />
+                        android:text="Arrival Time"
+                        android:textStyle="bold"/>
 
                     <TextView
                         android:id="@+id/txt_endtime"
@@ -151,6 +157,8 @@
                     android:layout_marginRight="20dp"
                     android:background="@drawable/border_orange"
                     android:hint="Start"
+                    android:textColor="#000000"
+                    android:textStyle="bold"
                     android:text=""
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"
@@ -162,6 +170,7 @@
                     android:layout_width="130dp"
                     android:layout_height="40dp"
                     android:layout_marginBottom="10dp"
+                    android:textStyle="bold"
                     android:background="@drawable/border_orange"
                     android:hint="DECLINE"
                     android:text=""

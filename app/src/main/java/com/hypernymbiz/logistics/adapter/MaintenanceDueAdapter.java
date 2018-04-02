@@ -40,7 +40,7 @@ public class MaintenanceDueAdapter extends RecyclerView.Adapter<MaintenanceDueAd
         holder.maintenancename.setText(maintenanceOverdues.get(position).getMaintenanceName());
         holder.maintenancestatus.setText(maintenanceOverdues.get(position).getStatus());
         holder.date.setText(AppUtils.getFormattedDate(maintenanceOverdues.get(position).getDueDate()));
-        holder.time.setText(AppUtils.getTime(maintenanceOverdues.get(position).getDueDate()));
+        holder.time.setText(AppUtils.getTimedate(maintenanceOverdues.get(position).getDueDate()));
         holder.maintenance_assignedtruck.setText(maintenanceOverdues.get(position).getAssignedTruck());
 //        holder.endtime.setTex
         holder.maintenancetype.setText(maintenanceOverdues.get(position).getMaintenanceType());

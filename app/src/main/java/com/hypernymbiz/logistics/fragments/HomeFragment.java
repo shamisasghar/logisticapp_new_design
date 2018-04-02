@@ -93,7 +93,6 @@ public class HomeFragment extends Fragment  implements View.OnClickListener, OnM
     GoogleMap googleMap;
     SupportMapFragment supportMapFragment;
     CoordinatorLayout coordinatorLayout;
-    Dialog complete, cancl;
     GoogleApiClient googleApiClient;
     Marker marker, marker2, marker3;
     EditText editText;
@@ -101,9 +100,10 @@ public class HomeFragment extends Fragment  implements View.OnClickListener, OnM
     LoadingDialog dialog;
     String size;
     TextView fromaddress_inprogress,toaddress_inprogress,starttime_inprogress,endtime_inprogress,jobname_inprogress;
-
     Location location;
     LatLng ll;
+
+    Button btn_dialog;
     boolean check = true;
     boolean checklocation = true;
     CameraUpdate update;
@@ -253,12 +253,21 @@ public class HomeFragment extends Fragment  implements View.OnClickListener, OnM
             @Override
             public void onClick(View v) {
 
-                Toast.makeText(getContext(), "lastjob", Toast.LENGTH_SHORT).show();
-                complete = new Dialog(getContext());
-                complete.setContentView(R.layout.dialog_complete_job);
-                complete.setCanceledOnTouchOutside(false);
-                complete.show();
-                complete.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                lastjob = new Dialog(getContext());
+                lastjob.setContentView(R.layout.dialog_last_job);
+                btn_dialog=(Button)lastjob.findViewById(R.id.btn_dialog_ok);
+                lastjob.setCanceledOnTouchOutside(false);
+                lastjob.show();
+                lastjob.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+                btn_dialog.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        lastjob.hide();
+                    }
+                });
+
+
             }
         });
 

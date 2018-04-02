@@ -84,7 +84,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="5dp"
                         android:layout_gravity="center"
-                        android:text="Truckname 01"
+                        android:text="n/a"
                         android:textStyle="bold" />
                 </LinearLayout>
 
@@ -187,7 +187,7 @@
                                 android:layout_weight="0.5"
                                 android:gravity="center"
                                 android:id="@+id/txt_job_name"
-                                android:text="JOB"
+                                android:text="n/a"
                                 android:textColor="#ffffff" />
 
                             <TextView
@@ -228,7 +228,9 @@
                                         android:id="@+id/txt_from_address"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:text="From Address:" />
+                                        android:text="n/a"
+                                      android:textSize="13sp"
+                                        />
 
                                     <LinearLayout
                                         android:layout_width="match_parent"
@@ -238,6 +240,8 @@
                                             android:layout_width="0dp"
                                             android:layout_height="wrap_content"
                                             android:layout_weight="0.5"
+                                            android:textStyle="bold"
+                                            android:textColor="@color/colorTabsText"
                                             android:text="Depart Time" />
 
                                         <TextView
@@ -246,7 +250,7 @@
                                             android:layout_height="wrap_content"
                                             android:layout_weight="1"
                                             android:layout_marginLeft="5dp"
-                                            android:text="9:00 AM" />
+                                            android:text="n/a" />
                                     </LinearLayout>
                                 </LinearLayout>
                             </LinearLayout>
@@ -281,7 +285,8 @@
                                         android:id="@+id/txt_to_address"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:text="To Address:" />
+                                        android:textSize="13sp"
+                                        android:text="n/a" />
 
                                     <LinearLayout
                                         android:layout_width="match_parent"
@@ -291,6 +296,8 @@
                                             android:layout_width="0dp"
                                             android:layout_height="wrap_content"
                                             android:layout_weight="0.4"
+                                            android:textStyle="bold"
+                                            android:textColor="@color/colorTabsText"
                                             android:text="Arrival Time" />
 
                                         <TextView
@@ -299,7 +306,7 @@
                                             android:layout_height="wrap_content"
                                             android:layout_weight="1"
                                             android:layout_marginLeft="5dp"
-                                            android:text="9:00 AM" />
+                                            android:text="n/a" />
                                     </LinearLayout>
                                 </LinearLayout>
                             </LinearLayout>
@@ -404,7 +411,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
-                            android:text="18"
+                            android:text="0"
                             android:textSize="20sp" />
                     </LinearLayout>
 
@@ -432,7 +439,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="9"
+                            android:text="0"
                             android:textSize="20sp" />
                     </LinearLayout>
 
@@ -460,7 +467,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="6"
+                            android:text="0"
                             android:textSize="20sp" />
                     </LinearLayout>
 
@@ -511,7 +518,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="7.34 KM/L"
+                            android:text="N/a KM/L"
                             android:textColor="#ffffff"
                             android:textSize="19sp" />
 
@@ -553,7 +560,7 @@
                             android:layout_height="wrap_content"
                             android:text="JOB 7"
                             android:textColor="#ffffff"
-                            android:textSize="25sp" />
+                            android:textSize="20sp" />
 
                     </LinearLayout>
 

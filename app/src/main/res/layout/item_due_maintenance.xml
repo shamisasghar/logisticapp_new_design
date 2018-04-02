@@ -18,7 +18,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/txt_maintenance_name"
-                android:text="MAINTENANCE"/>
+                android:textStyle="bold"
+                android:text="n/a"/>
             <View
                 android:layout_width="5dp"
                 android:layout_height="1dp"
@@ -30,7 +31,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Due"
+                android:text="n/a"
                 android:id="@+id/txt_maintenance_status"/>
         </LinearLayout>
         <LinearLayout
@@ -41,7 +42,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/txt_assigned_truck"
-                android:text="Truckname 06"/>
+                android:textStyle="bold"
+                android:text="n/a"/>
             <View
                 android:layout_width="5dp"
                 android:layout_height="1dp"
@@ -54,7 +56,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/txt_maintenance_type"
-                android:text="Oil Change"/>
+                android:text="n/a"/>
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
@@ -63,24 +65,28 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Date :"/>
+                android:text="Date :"
+
+                android:textStyle="bold"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
                 android:id="@+id/txt_maintenance_date"
-                android:text="6 March, 2018"/>
+                android:text="n/a"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="45dp"
-                android:text="Time"/>
+                android:textStyle="bold"
+                android:text="Time:"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="end"
-                android:text="9:56 AM"
+                android:layout_marginLeft="5dp"
+                android:text="n/a"
                 android:id="@+id/txt_maintenance_time"/>
         </LinearLayout>
 
