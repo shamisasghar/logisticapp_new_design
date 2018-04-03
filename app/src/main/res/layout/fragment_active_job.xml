@@ -69,13 +69,14 @@
                         android:layout_height="wrap_content"
                         android:layout_marginRight="5dp"
                         android:text="0"
-                        android:visibility="gone"
+                        android:visibility="visible"
                         android:textSize="40sp" />
                     <com.github.capur16.digitspeedviewlib.DigitSpeedView
                         android:layout_width="80dp"
                         android:id="@+id/digitspeed1"
                         android:layout_height="80dp"
                         app:speedTextSize="15sp"
+                        android:visibility="gone"
                         app:speedTextColor="@color/colorPrimary"
                         android:gravity="center"
                         app:disableBackgroundImage="true"
@@ -121,8 +122,8 @@
                     android:layout_weight="1">
 
                     <ImageView
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
                         android:layout_gravity="center"
                         app:srcCompat="@drawable/ic_launcher_background" />
 
@@ -310,9 +311,7 @@
                             android:id="@+id/txt_from_address"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="n/a"
-
-                            android:textStyle="bold"/>
+                            android:text="n/a"/>
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -322,7 +321,6 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="0.4"
-                                android:textColor="@color/colorTabsText"
                                 android:text="Depart Time :"
                                 android:textStyle="bold"/>
 
@@ -343,7 +341,6 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="0.4"
                                 android:text="Your DepartTime :"
-                                android:textColor="@color/colorTabsText"
                                 android:textStyle="bold"/>
 
                             <TextView
@@ -398,7 +395,6 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="0.4"
                                 android:text="Arrival Time :"
-                                android:textColor="@color/colorTabsText"
                                 android:textStyle="bold"/>
 
                             <TextView

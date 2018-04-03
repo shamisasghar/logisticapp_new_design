@@ -46,6 +46,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
@@ -118,7 +119,6 @@ public class ActiveJobFragment extends Fragment implements View.OnClickListener,
     View view;
     Calendar c;
     String driverendtime;
-
     Context context;
 
     @Override
@@ -143,8 +143,8 @@ public class ActiveJobFragment extends Fragment implements View.OnClickListener,
         truckspeed = (TextView) view.findViewById(R.id.txt_speed);
         digitSpeedView = (DigitSpeedView) view.findViewById(R.id.digitspeed1);
         truckstatus = (TextView) view.findViewById(R.id.txt_truck_status);
-       jobStarttime = (TextView) view.findViewById(R.id.txt_starttime);
-       jobendtime = (TextView) view.findViewById(R.id.txt_endtime);
+        jobStarttime = (TextView) view.findViewById(R.id.txt_starttime);
+        jobendtime = (TextView) view.findViewById(R.id.txt_endtime);
         yourstarttime = (TextView) view.findViewById(R.id.txt_actual_starttime);
         jobfromaddress = (TextView) view.findViewById(R.id.txt_from_address);
         jobendaddress = (TextView) view.findViewById(R.id.txt_to_address);
@@ -169,15 +169,12 @@ public class ActiveJobFragment extends Fragment implements View.OnClickListener,
 
         String starttime,endtime,actualstarttime;
 
-       starttime= pref.getString("Startjob", "");
+        starttime= pref.getString("Startjob", "");
         endtime=pref.getString("Startend", "");
         actualstarttime=pref.getString("drivertime", "");
 
         Toast.makeText(context, ""+starttime, Toast.LENGTH_SHORT).show();
-//        SimpleDateFormat actualdateFmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-//        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-//        String formattedDate = dateFormat.format(actualstarttime).toString();
-//        System.out.println(formattedDate);
+
 
         jobStarttime.setText(starttime);
         jobendtime.setText(endtime);
@@ -391,12 +388,13 @@ public class ActiveJobFragment extends Fragment implements View.OnClickListener,
 
 
             truckstatus.setText("Idel");
+            truckspeed.setText("0");
             digitSpeedView.updateSpeed(currentspeed);
 
         }
         else {
             digitSpeedView.updateSpeed(currentspeed);
-            truckspeed.setText(currentspeed);
+            truckspeed.setText(String.valueOf(currentspeed));
             truckstatus.setText("Moving");
         }
 
@@ -410,6 +408,10 @@ public class ActiveJobFragment extends Fragment implements View.OnClickListener,
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
+
+        MapStyleOptions mapStyleOptions=MapStyleOptions.loadRawResourceStyle(getActivity(),R.raw.map);
+        googleMap.setMapStyle(mapStyleOptions);
+
 
         slat = Double.parseDouble(pref.getString("Startlat", ""));
         slng = Double.parseDouble(pref.getString("Startlng", ""));

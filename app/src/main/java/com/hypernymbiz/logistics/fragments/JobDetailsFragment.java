@@ -11,6 +11,8 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Looper;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
@@ -25,14 +27,19 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.SettingsClient;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MapStyleOptions;
 import com.hypernymbiz.logistics.FrameActivity;
 import com.hypernymbiz.logistics.R;
 import com.hypernymbiz.logistics.api.ApiInterface;
@@ -70,7 +77,7 @@ import static android.content.Context.MODE_PRIVATE;
  * Created by Metis on 21-Mar-18.
  */
 
-public class JobDetailsFragment extends Fragment implements View.OnClickListener, com.google.android.gms.location.LocationListener {
+public class JobDetailsFragment extends Fragment implements View.OnClickListener, com.google.android.gms.location.LocationListener,OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
     private Toolbar mToolbar;
     private TextView mToolbarTitle;
     SupportMapFragment supportMapFragment;
@@ -90,6 +97,8 @@ public class JobDetailsFragment extends Fragment implements View.OnClickListener
     LatLng ll;
     String strlat, strlng, endlat, endlng;
     LoadingDialog dialog;
+    GoogleMap googleMap;
+    GoogleApiClient googleApiClient;
 
 
     private long UPDATE_INTERVAL = 1000;  /* 1 sec */
@@ -127,6 +136,10 @@ public class JobDetailsFragment extends Fragment implements View.OnClickListener
         jbend = (TextView) view.findViewById(R.id.txt_endtime);
         getUserAssociatedEntity = LoginUtils.getUserAssociatedEntity(getActivity());
         pref = getActivity().getSharedPreferences("TAG", MODE_PRIVATE);
+        supportMapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.mapView);
+
+        buildGoogleApiClient();
+        initMap();
 
         dialog = new LoadingDialog(getActivity(), getString(R.string.msg_loading));
         dialog.setCancelable(false);
@@ -664,8 +677,9 @@ public class JobDetailsFragment extends Fragment implements View.OnClickListener
                                     }
                                     String strttime, endtime;
 
-                                    strttime =AppUtils.getFormattedDate(response.body().response.getJobStartDatetime()) + " " +AppUtils.getTime(response.body().response.getJobStartDatetime());
-                                    endtime = AppUtils.getFormattedDate(response.body().response.getJobEndDatetime()) + " " + AppUtils.getTime(response.body().response.getJobEndDatetime());
+
+                                    strttime = AppUtils.getTimedate(response.body().response.getJobStartDatetime());
+                                    endtime = AppUtils.getTimedate(response.body().response.getJobEndDatetime());
                                     editor = pref.edit();
                                     editor.putString("Startjob", strttime);
                                     editor.putString("Startend", endtime);
@@ -759,4 +773,41 @@ public class JobDetailsFragment extends Fragment implements View.OnClickListener
                 },
                 Looper.myLooper());
     }
+
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        MapStyleOptions mapStyleOptions=MapStyleOptions.loadRawResourceStyle(getActivity(),R.raw.map);
+        googleMap.setMapStyle(mapStyleOptions);
+
+
+    }
+    private void initMap() {
+        supportMapFragment.getMapAsync(this);
+
+    }
+
+    protected synchronized void buildGoogleApiClient() {
+        googleApiClient = new GoogleApiClient.Builder(getContext())
+                .addApi(LocationServices.API)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this).build();
+        googleApiClient.connect();
+    }
+
+
 }

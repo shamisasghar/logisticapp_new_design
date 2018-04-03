@@ -9,28 +9,15 @@
     <android.support.v7.widget.CardView
         android:id="@+id/cardviewhome_map"
         android:layout_width="match_parent"
-        android:layout_height="270dp">
+        android:layout_height="0dp"
+        android:layout_weight="1">
 
         <fragment
             android:id="@+id/mapView"
             android:name="com.google.android.gms.maps.SupportMapFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-
         </fragment>
-        <!--<RelativeLayout-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content">-->
-
-        <!--<EditText-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:id="@+id/edit_search"-->
-        <!--android:editable="false"-->
-        <!--android:imeOptions="actionSearch"/>-->
-
-
-        <!--</RelativeLayout>-->
 
         <ImageButton
         android:id="@+id/btn_mylocation"
@@ -54,17 +41,19 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="0dp"
+        android:layout_weight="1">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="0dp"
+            android:layout_marginTop="10dp"
             android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+
                 android:orientation="horizontal">
 
                 <LinearLayout
@@ -77,6 +66,7 @@
                     <ImageView
                         android:layout_width="40dp"
                         android:layout_height="40dp"
+                        android:layout_marginLeft="4dp"
                         android:src="@drawable/ic_launcher_background" />
 
                     <TextView
@@ -99,14 +89,17 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="5dp"
-                        android:text="47"
-                        android:visibility="gone"
-                        android:textSize="30sp" />
+                        android:text="0"
+                        android:id="@+id/txt_truckspeed"
+                        android:visibility="visible"
+                        android:textSize="40sp"
+                        />
                     <com.github.capur16.digitspeedviewlib.DigitSpeedView
                         android:layout_width="100dp"
                         android:id="@+id/digitspeed1"
                         android:layout_height="80dp"
                         app:speedTextSize="15sp"
+                        android:visibility="gone"
                         app:speedTextColor="@color/colorPrimary"
                         android:gravity="center"
                         app:disableBackgroundImage="true"
@@ -127,7 +120,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="KMPH"
-                            android:textSize="15sp" />
+                            android:textStyle="bold"
+                            android:textSize="20sp" />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -135,6 +129,7 @@
                             android:id="@+id/txt_truck_status"
                             android:layout_gravity="center_vertical"
                             android:text="-"
+                            android:textStyle="bold"
                             android:textSize="10sp" />
                     </LinearLayout>
                 </LinearLayout>
@@ -148,7 +143,7 @@
                 android:layout_marginLeft="13dp"
                 android:layout_marginRight="13dp"
                 android:layout_marginTop="5dp"
-                android:visibility="visible"
+                android:visibility="gone"
                 android:background="@color/colorPrimary">
 
                 <LinearLayout
@@ -241,7 +236,6 @@
                                             android:layout_height="wrap_content"
                                             android:layout_weight="0.5"
                                             android:textStyle="bold"
-                                            android:textColor="@color/colorTabsText"
                                             android:text="Depart Time" />
 
                                         <TextView
@@ -297,7 +291,6 @@
                                             android:layout_height="wrap_content"
                                             android:layout_weight="0.4"
                                             android:textStyle="bold"
-                                            android:textColor="@color/colorTabsText"
                                             android:text="Arrival Time" />
 
                                         <TextView
@@ -518,7 +511,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="N/a KM/L"
+                            android:text="0 KM/L"
                             android:textColor="#ffffff"
                             android:textSize="19sp" />
 

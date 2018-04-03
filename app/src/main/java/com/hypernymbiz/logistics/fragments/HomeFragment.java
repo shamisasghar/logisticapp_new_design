@@ -38,6 +38,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.hypernymbiz.logistics.FrameActivity;
@@ -102,13 +103,12 @@ public class HomeFragment extends Fragment  implements View.OnClickListener, OnM
     TextView fromaddress_inprogress,toaddress_inprogress,starttime_inprogress,endtime_inprogress,jobname_inprogress;
     Location location;
     LatLng ll;
-
     Button btn_dialog;
     boolean check = true;
     boolean checklocation = true;
     CameraUpdate update;
     LatLng dest = new LatLng(33.6689488, 72.9939884);
-    TextView mNumberOfCartItemsText,turckstatus;
+    TextView mNumberOfCartItemsText,turckstatus,truckspeed;
     LinearLayout linear_job, linear_maintenance, linear_violation, linear_inprogress,linear_lastjob;
     LocationRequest locationRequest;
     Context mContext;
@@ -165,10 +165,11 @@ public class HomeFragment extends Fragment  implements View.OnClickListener, OnM
         linear_violation = (LinearLayout) view.findViewById(R.id.layout_linear_violation);
         linear_inprogress = (LinearLayout) view.findViewById(R.id.layout_linear_inprogress);
         linear_lastjob=(LinearLayout) view.findViewById(R.id.layout_linear_lastjob);
-
+        supportMapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.mapView);
         fromaddress_inprogress=(TextView)view.findViewById(R.id.txt_from_address);
         toaddress_inprogress=(TextView)view.findViewById(R.id.txt_to_address);
         turckstatus=(TextView)view.findViewById(R.id.txt_truck_status);
+        truckspeed=(TextView)view.findViewById(R.id.txt_truckspeed);
         starttime_inprogress=(TextView)view.findViewById(R.id.txt_starttime);
         endtime_inprogress=(TextView)view.findViewById(R.id.txt_endtime);
         jobname_inprogress=(TextView)view.findViewById(R.id.txt_job_name);
@@ -188,31 +189,38 @@ public class HomeFragment extends Fragment  implements View.OnClickListener, OnM
             linear_inprogress.setVisibility(View.GONE);
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.MATCH_PARENT,
-                    800
+                    700
             );
-            mapcardalayout.setLayoutParams(params);
+//            mapcardalayout.setLayoutParams(params);
         }
         else{
+
             linear_inprogress.setVisibility(View.VISIBLE);
             ActiveJobResume activeJobResume=ActiveJobUtils.getJobResume(getContext());
-            String startAddress = AppUtils.getAddress(activeJobResume.getSlat(), activeJobResume.getSlong(), getContext());
-            String endAddress = AppUtils.getAddress(activeJobResume.getElat(), activeJobResume.getElong(), getContext());
-            String departtime=activeJobResume.getStart_time();
-            String arrivaltime=activeJobResume.getEnd_time();
-            String jobname=activeJobResume.getJobname();
+            try {
+                String startAddress = AppUtils.getAddress(activeJobResume.getSlat(), activeJobResume.getSlong(), getContext());
+                String endAddress = AppUtils.getAddress(activeJobResume.getElat(), activeJobResume.getElong(), getContext());
+                String departtime = activeJobResume.getStart_time();
+                String arrivaltime = activeJobResume.getEnd_time();
+                String jobname = activeJobResume.getJobname();
 
-            fromaddress_inprogress.setText(startAddress);
-            toaddress_inprogress.setText(endAddress);
-            starttime_inprogress.setText(departtime);
-            endtime_inprogress.setText(arrivaltime);
-            jobname_inprogress.setText(jobname);
+                fromaddress_inprogress.setText(startAddress);
+                toaddress_inprogress.setText(endAddress);
+                starttime_inprogress.setText(departtime);
+                endtime_inprogress.setText(arrivaltime);
+                jobname_inprogress.setText(jobname);
+            }
+            catch (Exception ex)
+            {
+
+                Toast.makeText(mContext, "missing route", Toast.LENGTH_SHORT).show();
+            }
 
 
         }
 
 
 
-        supportMapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.mapView);
         //      init_persistent_bottomsheet();
 
         linear_job.setOnClickListener(new View.OnClickListener() {
@@ -292,9 +300,9 @@ public class HomeFragment extends Fragment  implements View.OnClickListener, OnM
             linear_inprogress.setVisibility(View.GONE);
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.MATCH_PARENT,
-                    800
+                    700
             );
-            mapcardalayout.setLayoutParams(params);
+//            mapcardalayout.setLayoutParams(params);
 
         }
         else{
@@ -440,7 +448,9 @@ public class HomeFragment extends Fragment  implements View.OnClickListener, OnM
         MapsInitializer.initialize(getContext());
         this.googleMap = googleMap;
 //        googleMap.clear();
-        googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+               MapStyleOptions mapStyleOptions=MapStyleOptions.loadRawResourceStyle(getActivity(),R.raw.map);
+               googleMap.setMapStyle(mapStyleOptions);
+
 
 
 //        button.setOnClickListener(new View.OnClickListener() {
@@ -542,14 +552,14 @@ public class HomeFragment extends Fragment  implements View.OnClickListener, OnM
         if(currentspeed<1)
         {
 
-//            truckspeed.setText("0");
+           truckspeed.setText("0");
             turckstatus.setText("Idel");
             digitSpeedView.updateSpeed(currentspeed);
 
         }
         else {
             digitSpeedView.updateSpeed(currentspeed);
-//            truckspeed.setText(currentspeed);
+            truckspeed.setText(String.valueOf(currentspeed));
             turckstatus.setText("Moving");
         }
 
